@@ -1,0 +1,87 @@
+# Project-specific files
+HELP.md
+
+# Target and build directories
+target/
+!**/src/main/**/target/
+!**/src/test/**/target/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+# Maven Wrapper files
+.mvn/
+!.mvn/wrapper/maven-wrapper.jar
+
+# Sensitive Spring Boot configuration files
+src/main/resources/application.yml
+src/main/resources/application.yaml
+src/main/resources/application-*.yml
+src/main/resources/application-*.yaml
+src/main/resources/application.properties
+src/main/resources/application-*.properties
+
+# STS (Spring Tool Suite) specific files
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings/
+.springBeans
+.sts4-cache
+
+# IntelliJ IDEA files
+.idea/
+*.iws
+*.iml
+*.ipr
+
+# Eclipse files
+.classpath
+.project
+.settings/
+
+# NetBeans files
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+# VS Code settings
+.vscode/
+
+# macOS specific files
+.DS_Store
+
+# Logs
+*.log
+logs/
+
+# Compiled class files
+*.class
+
+# Package files
+*.jar
+*.war
+*.ear
+
+# Node modules (if using Node.js tools or a frontend)
+node_modules/
+
+# Temporary files
+*~
+
+# Thumbnails
+Thumbs.db
+
+# Database files
+*.h2.db
+*.mv.db
+
+# Sensitive and environment files
+.env
+.credentials
+.auth
+.secret
+.ftpconfig
