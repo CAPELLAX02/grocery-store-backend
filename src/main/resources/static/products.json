@@ -1,0 +1,180 @@
+[
+  {
+    "name": "Organic Apple",
+    "description": "Fresh and juicy organic apples.",
+    "price": 1.20,
+    "quantity": 100,
+    "imageUrl": "https://res.cloudinary.com/your-cloud-name/image/upload/v1/products/apple.jpg",
+    "category": "Fruits",
+    "brand": "Nature's Best",
+    "weight": "1kg",
+    "reviews": [
+      {
+        "username": "john_doe",
+        "rating": 4,
+        "comment": "Very fresh and tasty apples. Will buy again!",
+        "date": "2023-11-01"
+      },
+      {
+        "username": "jane_smith",
+        "rating": 5,
+        "comment": "Loved the taste and quality!",
+        "date": "2023-11-02"
+      }
+    ]
+  },
+  {
+    "name": "Whole Wheat Bread",
+    "description": "Healthy whole wheat bread with no preservatives.",
+    "price": 2.50,
+    "quantity": 50,
+    "imageUrl": "https://res.cloudinary.com/your-cloud-name/image/upload/v1/products/whole-wheat-bread.jpg",
+    "category": "Bakery",
+    "brand": "Baker's Delight",
+    "weight": "500g",
+    "reviews": [
+      {
+        "username": "alice_m",
+        "rating": 3,
+        "comment": "It was okay, a bit dry for my taste.",
+        "date": "2023-11-03"
+      }
+    ]
+  },
+  {
+    "name": "Organic Milk",
+    "description": "Pure organic milk from grass-fed cows.",
+    "price": 1.80,
+    "quantity": 200,
+    "imageUrl": "https://res.cloudinary.com/your-cloud-name/image/upload/v1/products/milk.jpg",
+    "category": "Dairy",
+    "brand": "Farm Fresh",
+    "weight": "1L",
+    "reviews": [
+      {
+        "username": "bob_k",
+        "rating": 5,
+        "comment": "Best milk I've ever tasted!",
+        "date": "2023-11-04"
+      }
+    ]
+  },
+  {
+    "name": "Brown Eggs",
+    "description": "Cage-free brown eggs, rich in protein.",
+    "price": 3.20,
+    "quantity": 80,
+    "imageUrl": "https://res.cloudinary.com/your-cloud-name/image/upload/v1/products/eggs.jpg",
+    "category": "Dairy",
+    "brand": "Golden Farms",
+    "weight": "12 pcs",
+    "reviews": []
+  },
+  {
+    "name": "Tomato",
+    "description": "Fresh, organic tomatoes perfect for salads.",
+    "price": 0.90,
+    "quantity": 150,
+    "imageUrl": "https://res.cloudinary.com/your-cloud-name/image/upload/v1/products/tomato.jpg",
+    "category": "Vegetables",
+    "brand": "Nature's Farm",
+    "weight": "1kg",
+    "reviews": [
+      {
+        "username": "mark_z",
+        "rating": 4,
+        "comment": "Very fresh tomatoes, loved them in my salad.",
+        "date": "2023-11-05"
+      }
+    ]
+  },
+  {
+    "name": "Olive Oil",
+    "description": "Extra virgin olive oil, cold-pressed for the best quality.",
+    "price": 8.50,
+    "quantity": 30,
+    "imageUrl": "https://res.cloudinary.com/your-cloud-name/image/upload/v1/products/olive-oil.jpg",
+    "category": "Cooking Oil",
+    "brand": "Olive Tree",
+    "weight": "750ml",
+    "reviews": [
+      {
+        "username": "susan_b",
+        "rating": 5,
+        "comment": "High-quality olive oil, perfect for salads and cooking!",
+        "date": "2023-11-06"
+      },
+      {
+        "username": "tom_h",
+        "rating": 4,
+        "comment": "Good flavor, though a bit pricey.",
+        "date": "2023-11-07"
+      }
+    ]
+  },
+  {
+    "name": "Pasta",
+    "description": "High-quality durum wheat pasta.",
+    "price": 1.50,
+    "quantity": 100,
+    "imageUrl": "https://res.cloudinary.com/your-cloud-name/image/upload/v1/products/pasta.jpg",
+    "category": "Pantry",
+    "brand": "Italiano",
+    "weight": "500g",
+    "reviews": [
+      {
+        "username": "carla_g",
+        "rating": 5,
+        "comment": "Great quality pasta, just like in Italy!",
+        "date": "2023-11-08"
+      }
+    ]
+  },
+  {
+    "name": "Banana",
+    "description": "Ripe and sweet bananas full of potassium.",
+    "price": 1.10,
+    "quantity": 120,
+    "imageUrl": "https://res.cloudinary.com/your-cloud-name/image/upload/v1/products/banana.jpg",
+    "category": "Fruits",
+    "brand": "Tropical Harvest",
+    "weight": "1kg",
+    "reviews": [
+      {
+        "username": "david_l",
+        "rating": 4,
+        "comment": "Tasty bananas, ripe and sweet.",
+        "date": "2023-11-09"
+      }
+    ]
+  },
+  {
+    "name": "Greek Yogurt",
+    "description": "Creamy Greek yogurt rich in protein.",
+    "price": 4.00,
+    "quantity": 60,
+    "imageUrl": "https://res.cloudinary.com/your-cloud-name/image/upload/v1/products/greek-yogurt.jpg",
+    "category": "Dairy",
+    "brand": "Yogurt Land",
+    "weight": "500g",
+    "reviews": [
+      {
+        "username": "julia_r",
+        "rating": 5,
+        "comment": "Perfect texture and taste. Will buy again.",
+        "date": "2023-11-10"
+      }
+    ]
+  },
+  {
+    "name": "Broccoli",
+    "description": "Fresh green broccoli, perfect for steaming or stir-frying.",
+    "price": 2.00,
+    "quantity": 90,
+    "imageUrl": "https://res.cloudinary.com/your-cloud-name/image/upload/v1/products/broccoli.jpg",
+    "category": "Vegetables",
+    "brand": "Green Farm",
+    "weight": "500g",
+    "reviews": []
+  }
+]
