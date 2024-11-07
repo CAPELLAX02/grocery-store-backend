@@ -1,5 +1,6 @@
 package com.capellax.grocery_app_backend.config;
 
+import com.capellax.grocery_app_backend.security.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,12 +21,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-//@EnableMethodSecurity(prePostEnabled = true)
 @EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    // TODO: Inject JwtAuthenticationFilter
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final UserDetailsService userDetailsService;
 
     @Bean
@@ -54,14 +54,28 @@ public class SecurityConfig {
     ) throws Exception {
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(auth -> auth.requestMatchers(
-                                        "/auth/**" // TODO: edit later on
-                                )
-                                .permitAll()
-                                .requestMatchers(
-                                        "/products/**" // TODO: edit later on
-                                )
+                .authorizeHttpRequests(auth -> auth
+                        // Public endpoints
+                        .requestMatchers(
+                                "/auth/**",
+                                "/products",
+                                "/products/{id}"
+                        )
+                        .permitAll()
+
+                        // Authenticated-only endpoints
+                        .requestMatchers(
+                                "/cart/**",
+                                "/orders/**",
+                                "/user/logout",
+                                "/user/updateProfile"
+                        )
                         .authenticated()
+
+                        // Admin-only endpoints (optional - uncomment if needed later on)
+                        //.requestMatchers("/admin/**").hasRole("ADMIN")
+
+                        // All other requests require authentication
                         .anyRequest()
                         .authenticated()
                 )
@@ -69,7 +83,7 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authenticationProvider(authenticationProvider())
-//                .addFilterBefore(, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 

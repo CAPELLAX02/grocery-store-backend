@@ -8,8 +8,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -22,7 +24,7 @@ import java.util.Optional;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
-    // TODO: Inject UserDetailsServiceImpl
+    private final UserDetailsServiceImpl userDetailsService;
 
     @Override
     protected void doFilterInternal(
@@ -36,9 +38,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String username = jwtService.extractUsernameFromToken(token);
 
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                // TODO: proceed implementation using UserDetailsServiceImpl when ready
+                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+
+                if (jwtService.validateToken(token, userDetails)) {
+                    setUpSpringAuthentication(request, userDetails);
+                    log.info("Authenticated user: {}", username);
+
+                } else {
+                    log.warn("Token validation failed for user: {}", username);
+                }
             }
+        } else {
+            log.debug("No JWT token found in the request headers");
         }
+
+        filterChain.doFilter(request, response);
     }
 
     private Optional<String> getTokenFromRequest(
@@ -49,6 +63,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return Optional.of(authHeader.substring(7));
         }
         return Optional.empty();
+    }
+
+    private void setUpSpringAuthentication(
+            HttpServletRequest request,
+            UserDetails userDetails
+    ) {
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+                userDetails,
+                null,
+                userDetails.getAuthorities()
+        );
+        authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
     }
 
 
