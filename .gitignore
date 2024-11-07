@@ -80,6 +80,7 @@ Thumbs.db
 *.mv.db
 
 # Sensitive and environment files
+*.env
 .env
 .credentials
 .auth
