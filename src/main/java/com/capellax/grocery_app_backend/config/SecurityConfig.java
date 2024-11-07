@@ -55,13 +55,15 @@ public class SecurityConfig {
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth.requestMatchers(
-                        "/auth/**" // TODO: edit later on
-                )
-                        .permitAll()
-                        .requestMatchers(
-                                "/products/**" // TODO: edit later on
-                        ).authenticated()
-                                .anyRequest().authenticated()
+                                        "/auth/**" // TODO: edit later on
+                                )
+                                .permitAll()
+                                .requestMatchers(
+                                        "/products/**" // TODO: edit later on
+                                )
+                        .authenticated()
+                        .anyRequest()
+                        .authenticated()
                 )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
