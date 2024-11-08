@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -29,9 +30,8 @@ public class User {
 
     private boolean enabled;
 
-    private List<CartItem> cart;
+    private List<CartItem> cart = new ArrayList<>();
 
-    private List<Order> orders;
-
+    private List<Order> orders = new ArrayList<>();
 
 }
