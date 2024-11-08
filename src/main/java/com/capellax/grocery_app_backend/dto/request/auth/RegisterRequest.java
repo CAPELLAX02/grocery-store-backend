@@ -1,4 +1,4 @@
-package com.capellax.grocery_app_backend.dto.request;
+package com.capellax.grocery_app_backend.dto.request.auth;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

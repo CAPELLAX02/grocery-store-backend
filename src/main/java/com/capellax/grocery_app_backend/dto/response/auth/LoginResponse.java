@@ -1,4 +1,4 @@
-package com.capellax.grocery_app_backend.dto.response;
+package com.capellax.grocery_app_backend.dto.response.auth;
 
 import lombok.Data;
 

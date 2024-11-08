@@ -1,10 +1,10 @@
 package com.capellax.grocery_app_backend.service;
 
-import com.capellax.grocery_app_backend.dto.request.*;
-import com.capellax.grocery_app_backend.dto.response.ForgotPasswordResponse;
-import com.capellax.grocery_app_backend.dto.response.LoginResponse;
-import com.capellax.grocery_app_backend.dto.response.RegisterResponse;
-import com.capellax.grocery_app_backend.dto.response.ResetPasswordResponse;
+import com.capellax.grocery_app_backend.dto.request.auth.*;
+import com.capellax.grocery_app_backend.dto.response.auth.ForgotPasswordResponse;
+import com.capellax.grocery_app_backend.dto.response.auth.LoginResponse;
+import com.capellax.grocery_app_backend.dto.response.auth.RegisterResponse;
+import com.capellax.grocery_app_backend.dto.response.auth.ResetPasswordResponse;
 import com.capellax.grocery_app_backend.model.User;
 import com.capellax.grocery_app_backend.repository.UserRepository;
 import com.capellax.grocery_app_backend.response.ApiResponse;
