@@ -1,8 +1,10 @@
 package com.capellax.grocery_app_backend.service;
 
 import com.capellax.grocery_app_backend.dto.request.ActivateAccountRequest;
+import com.capellax.grocery_app_backend.dto.request.ForgotPasswordRequest;
 import com.capellax.grocery_app_backend.dto.request.LoginRequest;
 import com.capellax.grocery_app_backend.dto.request.RegisterRequest;
+import com.capellax.grocery_app_backend.dto.response.ForgotPasswordResponse;
 import com.capellax.grocery_app_backend.dto.response.LoginResponse;
 import com.capellax.grocery_app_backend.dto.response.RegisterResponse;
 import com.capellax.grocery_app_backend.model.User;
@@ -33,11 +35,17 @@ public class AuthenticationService {
     private final MailService mailService;
     private final JwtService jwtService;
 
-    public ApiResponse<RegisterResponse> registerUser(
-            RegisterRequest registerRequest
-    ) {
-        User user = new User();
+    public ApiResponse<RegisterResponse> registerUser(RegisterRequest registerRequest) {
+        Optional<User> existingUser = userRepository.findByEmail(registerRequest.getEmail());
 
+        if (existingUser.isPresent()) {
+            User user = existingUser.get();
+            if (user.isEnabled()) {
+                return ApiResponse.error("User already registered and activated.", HttpStatus.CONFLICT);
+            }
+        }
+
+        User user = new User();
         user.setUsername(registerRequest.getUsername());
         user.setEmail(registerRequest.getEmail());
         user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
@@ -48,11 +56,7 @@ public class AuthenticationService {
 
         userRepository.save(user);
 
-        mailService.sendActivationCode(
-                user.getEmail(),
-                user.getUsername(),
-                activationCode
-        );
+        mailService.sendActivationCode(user.getEmail(), user.getUsername(), activationCode);
 
         RegisterResponse response = new RegisterResponse();
         response.setUserId(user.getId());
@@ -60,6 +64,12 @@ public class AuthenticationService {
         response.setMessage("Please check your email (" + user.getEmail() + ") for the activation code");
 
         return ApiResponse.success(response, "User registered successfully. Activation code sent via email.");
+    }
+
+    private String generateActivationCode() {
+        Random random = new Random();
+        int code = 100000 + random.nextInt(100000);
+        return String.valueOf(code);
     }
 
     public ApiResponse<String> activateUser(
@@ -118,10 +128,23 @@ public class AuthenticationService {
         }
     }
 
-    private String generateActivationCode() {
+    // TODO: Implement forgotPassword and resetPassword business logic here
+
+    private String generateResetPasswordCode() {
         Random random = new Random();
         int code = 100000 + random.nextInt(100000);
         return String.valueOf(code);
     }
+
+
+
+
+
+
+
+
+
+
+
 
 }

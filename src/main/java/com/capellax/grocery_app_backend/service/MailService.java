@@ -16,28 +16,53 @@ public class MailService {
     private final JavaMailSender mailSender;
     private final TemplateEngine templateEngine;
 
-    public void sendActivationCode(
+    public void sendActivationCode(String to, String username, String activationCode) {
+        sendEmailWithTemplate(
+                to,
+                username,
+                activationCode,
+                "Account Activation Code",
+                "activation-email-template"
+        );
+    }
+
+    public void sendResetPasswordCode(String to, String username, String resetCode) {
+        sendEmailWithTemplate(
+                to,
+                username,
+                resetCode,
+                "Password Reset Code",
+                "reset-password-email-template"
+        );
+    }
+
+    private void sendEmailWithTemplate(
             String to,
             String username,
-            String activationCode
+            String code,
+            String subject,
+            String templateName
     ) {
-        String subject = "Account Activation Code";
         String content = buildEmailContent(
-                "activation-email-template",
+                templateName,
                 username,
-                activationCode
+                code
         );
-        sendEmail(to, subject, content);
+        sendEmail(
+                to,
+                subject,
+                content
+        );
     }
 
     private String buildEmailContent(
             String templateName,
             String username,
-            String activationCode
+            String code
     ) {
         Context context = new Context();
         context.setVariable("username", username);
-        context.setVariable("activationCode", activationCode);
+        context.setVariable("sixDigitCode", code);
         return templateEngine.process(templateName, context);
     }
 
