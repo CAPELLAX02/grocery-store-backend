@@ -20,9 +20,18 @@ public class User {
     private String id;
 
     private String username;
+
     private String email;
+
     private String password;
+
+    private String activationCode;
+
+    private boolean enabled;
+
     private List<CartItem> cart;
+
     private List<Order> orders;
+
 
 }
