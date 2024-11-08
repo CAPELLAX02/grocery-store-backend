@@ -3,7 +3,6 @@
 <head>
     <title>Account Activation</title>
     <style>
-        /* Genel Ayarlar */
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f9f4;
@@ -68,7 +67,7 @@
     <div class="content">
         <p>Hello <strong th:text="${username}">User</strong>,</p>
         <p>Welcome to our Grocery App! To complete your registration, please use the activation code below to activate your account.</p>
-        <p class="activation-code" th:text="${activationCode}">123456</p>
+        <p class="activation-code" th:text="${activationCode}"></p>
         <p>If you did not create an account, please ignore this email.</p>
         <p>Thank you,<br>The Grocery App Team</p>
     </div>

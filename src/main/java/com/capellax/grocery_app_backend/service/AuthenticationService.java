@@ -48,7 +48,11 @@ public class AuthenticationService {
 
         userRepository.save(user);
 
-        mailService.sendActivationCode(user.getEmail(), activationCode);
+        mailService.sendActivationCode(
+                user.getEmail(),
+                user.getUsername(),
+                activationCode
+        );
 
         RegisterResponse response = new RegisterResponse();
         response.setUserId(user.getId());

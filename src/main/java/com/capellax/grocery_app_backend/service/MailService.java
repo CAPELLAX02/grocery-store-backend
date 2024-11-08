@@ -18,18 +18,25 @@ public class MailService {
 
     public void sendActivationCode(
             String to,
+            String username,
             String activationCode
     ) {
         String subject = "Account Activation Code";
-        String content = buildEmailContent("activation-email-template", activationCode);
+        String content = buildEmailContent(
+                "activation-email-template",
+                username,
+                activationCode
+        );
         sendEmail(to, subject, content);
     }
 
     private String buildEmailContent(
             String templateName,
+            String username,
             String activationCode
     ) {
         Context context = new Context();
+        context.setVariable("username", username);
         context.setVariable("activationCode", activationCode);
         return templateEngine.process(templateName, context);
     }
