@@ -1,12 +1,10 @@
 package com.capellax.grocery_app_backend.service;
 
-import com.capellax.grocery_app_backend.dto.request.ActivateAccountRequest;
-import com.capellax.grocery_app_backend.dto.request.ForgotPasswordRequest;
-import com.capellax.grocery_app_backend.dto.request.LoginRequest;
-import com.capellax.grocery_app_backend.dto.request.RegisterRequest;
+import com.capellax.grocery_app_backend.dto.request.*;
 import com.capellax.grocery_app_backend.dto.response.ForgotPasswordResponse;
 import com.capellax.grocery_app_backend.dto.response.LoginResponse;
 import com.capellax.grocery_app_backend.dto.response.RegisterResponse;
+import com.capellax.grocery_app_backend.dto.response.ResetPasswordResponse;
 import com.capellax.grocery_app_backend.model.User;
 import com.capellax.grocery_app_backend.repository.UserRepository;
 import com.capellax.grocery_app_backend.response.ApiResponse;
@@ -35,7 +33,9 @@ public class AuthenticationService {
     private final MailService mailService;
     private final JwtService jwtService;
 
-    public ApiResponse<RegisterResponse> registerUser(RegisterRequest registerRequest) {
+    public ApiResponse<RegisterResponse> registerUser(
+            RegisterRequest registerRequest
+    ) {
         Optional<User> existingUser = userRepository.findByEmail(registerRequest.getEmail());
 
         if (existingUser.isPresent()) {
@@ -128,7 +128,32 @@ public class AuthenticationService {
         }
     }
 
-    // TODO: Implement forgotPassword and resetPassword business logic here
+    public ApiResponse<ForgotPasswordResponse> forgotPassword(
+            ForgotPasswordRequest forgotPasswordRequest
+    ) {
+        Optional<User> userOptional = userRepository.findByEmail(forgotPasswordRequest.getEmail());
+
+        if (userOptional.isEmpty()) {
+            return ApiResponse.error("User with this email does not exist.", HttpStatus.NOT_FOUND);
+        }
+
+        User user = userOptional.get();
+
+        String resetPasswordCode = generateResetPasswordCode();
+        user.setActivationCode(resetPasswordCode); // maybe .setResetPasswordCode later on
+        userRepository.save(user);
+
+        mailService.sendResetPasswordCode(
+                user.getEmail(),
+                user.getUsername(),
+                resetPasswordCode
+        );
+
+        ForgotPasswordResponse response = new ForgotPasswordResponse();
+        response.setMessage("Password reset code sent to " + user.getEmail());
+
+        return ApiResponse.success(response, "Password reset code sent successfully.");
+    }
 
     private String generateResetPasswordCode() {
         Random random = new Random();
@@ -136,15 +161,24 @@ public class AuthenticationService {
         return String.valueOf(code);
     }
 
+    public ApiResponse<ResetPasswordResponse> resetPassword(
+            ResetPasswordRequest resetPasswordRequest
+    ) {
+        Optional<User> userOptional = userRepository.findByActivationCode(resetPasswordRequest.getResetPasswordCode());
 
+        if (userOptional.isEmpty()) {
+            return ApiResponse.error("Invalid or expired reset code.", HttpStatus.BAD_REQUEST);
+        }
 
+        User user = userOptional.get();
+        user.setPassword(passwordEncoder.encode(resetPasswordRequest.getNewPassword()));
+        user.setActivationCode(null);
+        userRepository.save(user);
 
+        ResetPasswordResponse response = new ResetPasswordResponse();
+        response.setMessage("Password reset successfully.");
 
-
-
-
-
-
-
+        return ApiResponse.success(response, "Password reset successfully.");
+    }
 
 }
