@@ -27,50 +27,26 @@ public class AuthenticationController {
     public ResponseEntity<ApiResponse<RegisterResponse>> registerUser(
             @Valid @RequestBody RegisterRequest registerRequest
     ) {
-        try {
-            RegisterResponse response = authenticationService.registerUser(registerRequest);
-            return ResponseEntity.ok(ApiResponse.success(
-                    response,
-                    "Registration successfull. Please check your email for the activation code.")
-            );
-
-        } catch (Exception e) {
-            return ResponseEntity
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(ApiResponse.error(
-                            "Registration failed. Please try again later.",
-                            HttpStatus.INTERNAL_SERVER_ERROR
-                            )
-                    );
-        }
+        ApiResponse<RegisterResponse> response = authenticationService.registerUser(registerRequest);
+        return new ResponseEntity<>(response, response.getStatus() == 200 ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
     }
 
     @PostMapping("/activate")
     public ResponseEntity<ApiResponse<String>> activateUser(
             @Valid @RequestBody ActivateAccountRequest activateAccountRequest
     ) {
-        boolean isActivated = authenticationService.activateUser(
-                activateAccountRequest.getEmail(),
-                activateAccountRequest.getActivationCode()
-        );
-
-        if (isActivated) {
-            return ResponseEntity.ok(ApiResponse.success(
-                    null,
-                    "Account activated successfully."
-                    )
-            );
-
-        } else {
-            return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
-                    .body(ApiResponse.error(
-                            "Invalid activation code or email.",
-                            HttpStatus.BAD_REQUEST
-                            )
-                    );
-        }
+        ApiResponse<String> response = authenticationService.activateUser(activateAccountRequest);
+        HttpStatus status = response.getStatus() == 200 ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
+        return new ResponseEntity<>(response, status);
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<ApiResponse<LoginResponse>> loginUser(
+            @Valid @RequestBody LoginRequest loginRequest
+    ) {
+        ApiResponse<LoginResponse> response = authenticationService.loginUser(loginRequest);
+        HttpStatus status = response.getStatus() == 200 ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
+        return new ResponseEntity<>(response, status);
+    }
 
 }
