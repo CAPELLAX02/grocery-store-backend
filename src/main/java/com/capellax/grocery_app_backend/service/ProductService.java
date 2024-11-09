@@ -23,20 +23,4 @@ public class ProductService {
         return productRepository.findById(id).orElse(null);
     }
 
-    /*
-    JUST FOR TEST PURPOSES
-
-    public Product createProduct(
-            Product product
-    ) {
-        return productRepository.save(product);
-    }
-     */
-
-    public void deleteProductById(
-            String id
-    ) {
-        productRepository.deleteById(id);
-    }
-
 }

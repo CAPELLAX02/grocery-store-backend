@@ -32,12 +32,4 @@ public class ProductController {
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteProduct(
-            @PathVariable String id
-    ) {
-        productService.deleteProductById(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
 }
