@@ -4,10 +4,12 @@ import com.capellax.grocery_app_backend.dto.request.user.UpdateUserProfileReques
 import com.capellax.grocery_app_backend.dto.response.user.GetUserProfileResponse;
 import com.capellax.grocery_app_backend.dto.response.user.UpdateUserProfileResponse;
 import com.capellax.grocery_app_backend.response.ApiResponse;
+import com.capellax.grocery_app_backend.security.UserDetailsImpl;
 import com.capellax.grocery_app_backend.service.user.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -18,16 +20,21 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/profile")
-    public ResponseEntity<ApiResponse<GetUserProfileResponse>> getUserProfile() {
-        ApiResponse<GetUserProfileResponse> response = userService.getUserProfile();
+    public ResponseEntity<ApiResponse<GetUserProfileResponse>> getUserProfile(
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
+        String username = userDetails.getUsername();
+        ApiResponse<GetUserProfileResponse> response = userService.getUserProfile(username);
         return ResponseEntity.status(response.getStatus()).body(response);
     }
 
     @PutMapping("/profile")
     public ResponseEntity<ApiResponse<UpdateUserProfileResponse>> updateUserProfile(
-            @Valid @RequestBody UpdateUserProfileRequest request
+            @Valid @RequestBody UpdateUserProfileRequest request,
+            @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
-        ApiResponse<UpdateUserProfileResponse> response = userService.updateUserProfile(request);
+        String username = userDetails.getUsername();
+        ApiResponse<UpdateUserProfileResponse> response = userService.updateUserProfile(username, request);
         return ResponseEntity.status(response.getStatus()).body(response);
     }
 

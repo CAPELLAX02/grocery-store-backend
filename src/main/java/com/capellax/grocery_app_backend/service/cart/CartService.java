@@ -11,11 +11,8 @@ import com.capellax.grocery_app_backend.response.ApiResponse;
 import com.capellax.grocery_app_backend.service.product.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,12 +22,13 @@ public class CartService {
 
     private final UserRepository userRepository;
     private final ProductService productService;
+    private final CartServiceUtils cartServiceUtils;
 
     public ApiResponse<CartResponse> getCart(
             String username
     ) {
-        User user = getUserByUsername(username);
-        CartResponse cartResponse = buildCartResponse(user.getCart());
+        User user = cartServiceUtils.getUserByUsername(username);
+        CartResponse cartResponse = cartServiceUtils.buildCartResponse(user.getCart());
         return ApiResponse.success(cartResponse, "Cart fetched successfully");
     }
 
@@ -38,7 +36,7 @@ public class CartService {
             String username,
             AddItemToCartRequest request
     ) {
-        User user = getUserByUsername(username);
+        User user = cartServiceUtils.getUserByUsername(username);
         Product product = productService.getProductById(request.getProductId());
 
         List<CartItem> cart = user.getCart();
@@ -68,7 +66,7 @@ public class CartService {
             String username,
             UpdateCartItemRequest request
     ) {
-        User user = getUserByUsername(username);
+        User user = cartServiceUtils.getUserByUsername(username);
         List<CartItem> cart = user.getCart();
 
         CartItem item = cart.stream()
@@ -87,7 +85,7 @@ public class CartService {
             String username,
             String productId
     ) {
-        User user = getUserByUsername(username);
+        User user = cartServiceUtils.getUserByUsername(username);
         boolean removed = user.getCart()
                 .removeIf(item -> item.getProductId().equals(productId));
 
@@ -103,36 +101,10 @@ public class CartService {
     public ApiResponse<String> clearCart(
             String username
     ) {
-        User user = getUserByUsername(username);
+        User user = cartServiceUtils.getUserByUsername(username);
         user.getCart().clear();
         userRepository.save(user);
         return ApiResponse.success(null, "Cart cleared successfully");
-    }
-
-
-
-
-    private User getUserByUsername(
-            String username
-    ) {
-        return userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException(username));
-    }
-
-    private CartResponse buildCartResponse(
-            List<CartItem> cartItems
-    ) {
-        BigDecimal total = cartItems.stream()
-                .map(item -> BigDecimal.valueOf(item.getPrice()).multiply(BigDecimal.valueOf(item.getQuantity())))
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-
-        Double totalPrice = total.setScale(2, RoundingMode.HALF_UP).doubleValue();
-
-        CartResponse response = new CartResponse();
-        response.setCartItems(cartItems);
-        response.setTotalPrice(totalPrice);
-
-        return response;
     }
 
 }

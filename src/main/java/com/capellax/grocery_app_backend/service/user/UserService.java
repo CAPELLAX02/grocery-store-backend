@@ -6,14 +6,9 @@ import com.capellax.grocery_app_backend.dto.response.user.UpdateUserProfileRespo
 import com.capellax.grocery_app_backend.model.User;
 import com.capellax.grocery_app_backend.repository.UserRepository;
 import com.capellax.grocery_app_backend.response.ApiResponse;
-import com.capellax.grocery_app_backend.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -21,22 +16,12 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final UserServiceUtils userServiceUtils;
 
-    public ApiResponse<GetUserProfileResponse> getUserProfile() {
-        UserDetailsImpl userDetails =
-                (UserDetailsImpl) SecurityContextHolder.getContext()
-                        .getAuthentication()
-                        .getPrincipal();
-
-        String username = userDetails.getUsername();
-
-        Optional<User> userOptional = userRepository.findByUsername(username);
-
-        if (userOptional.isEmpty()) {
-            return ApiResponse.error("User not found", HttpStatus.NOT_FOUND);
-        }
-
-        User user = userOptional.get();
+    public ApiResponse<GetUserProfileResponse> getUserProfile(
+            String username
+    ) {
+        User user = userServiceUtils.getUserByUsername(username);
 
         GetUserProfileResponse response = new GetUserProfileResponse();
         response.setUsername(user.getUsername());
@@ -49,22 +34,10 @@ public class UserService {
     }
 
     public ApiResponse<UpdateUserProfileResponse> updateUserProfile(
+            String username,
             UpdateUserProfileRequest request
     ) {
-        UserDetailsImpl userDetails =
-                (UserDetailsImpl) SecurityContextHolder.getContext()
-                        .getAuthentication()
-                        .getPrincipal();
-
-        String username = userDetails.getUsername();
-
-        Optional<User> userOptional = userRepository.findByUsername(username);
-
-        if (userOptional.isEmpty()) {
-            return ApiResponse.error("User not found", HttpStatus.NOT_FOUND);
-        }
-
-        User user = userOptional.get();
+        User user = userServiceUtils.getUserByUsername(username);
 
         user.setUsername(request.getUsername());
 //        user.setEmail(request.getEmail());
