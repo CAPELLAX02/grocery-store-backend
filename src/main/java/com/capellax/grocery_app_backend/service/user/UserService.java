@@ -1,4 +1,4 @@
-package com.capellax.grocery_app_backend.service;
+package com.capellax.grocery_app_backend.service.user;
 
 import com.capellax.grocery_app_backend.dto.request.user.UpdateUserProfileRequest;
 import com.capellax.grocery_app_backend.dto.response.user.GetUserProfileResponse;

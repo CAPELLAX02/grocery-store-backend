@@ -6,7 +6,7 @@ import com.capellax.grocery_app_backend.dto.response.auth.LoginResponse;
 import com.capellax.grocery_app_backend.dto.response.auth.RegisterResponse;
 import com.capellax.grocery_app_backend.dto.response.auth.ResetPasswordResponse;
 import com.capellax.grocery_app_backend.response.ApiResponse;
-import com.capellax.grocery_app_backend.service.AuthenticationService;
+import com.capellax.grocery_app_backend.service.auth.AuthenticationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

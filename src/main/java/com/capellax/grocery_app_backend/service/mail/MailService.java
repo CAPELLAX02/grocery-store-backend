@@ -1,4 +1,4 @@
-package com.capellax.grocery_app_backend.service;
+package com.capellax.grocery_app_backend.service.mail;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;

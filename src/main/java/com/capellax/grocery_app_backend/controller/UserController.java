@@ -4,7 +4,7 @@ import com.capellax.grocery_app_backend.dto.request.user.UpdateUserProfileReques
 import com.capellax.grocery_app_backend.dto.response.user.GetUserProfileResponse;
 import com.capellax.grocery_app_backend.dto.response.user.UpdateUserProfileResponse;
 import com.capellax.grocery_app_backend.response.ApiResponse;
-import com.capellax.grocery_app_backend.service.UserService;
+import com.capellax.grocery_app_backend.service.user.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

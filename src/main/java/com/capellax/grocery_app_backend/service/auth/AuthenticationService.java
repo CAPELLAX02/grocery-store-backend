@@ -1,4 +1,4 @@
-package com.capellax.grocery_app_backend.service;
+package com.capellax.grocery_app_backend.service.auth;
 
 import com.capellax.grocery_app_backend.dto.request.auth.*;
 import com.capellax.grocery_app_backend.dto.response.auth.ForgotPasswordResponse;
@@ -8,6 +8,8 @@ import com.capellax.grocery_app_backend.dto.response.auth.ResetPasswordResponse;
 import com.capellax.grocery_app_backend.model.User;
 import com.capellax.grocery_app_backend.repository.UserRepository;
 import com.capellax.grocery_app_backend.response.ApiResponse;
+import com.capellax.grocery_app_backend.service.jwt.JwtService;
+import com.capellax.grocery_app_backend.service.mail.MailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

@@ -1,4 +1,4 @@
-package com.capellax.grocery_app_backend.service;
+package com.capellax.grocery_app_backend.service.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

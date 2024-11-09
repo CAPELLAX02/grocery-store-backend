@@ -4,7 +4,7 @@ import com.capellax.grocery_app_backend.dto.response.order.OrderListResponse;
 import com.capellax.grocery_app_backend.dto.response.order.OrderResponse;
 import com.capellax.grocery_app_backend.response.ApiResponse;
 import com.capellax.grocery_app_backend.security.UserDetailsImpl;
-import com.capellax.grocery_app_backend.service.OrderService;
+import com.capellax.grocery_app_backend.service.order.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

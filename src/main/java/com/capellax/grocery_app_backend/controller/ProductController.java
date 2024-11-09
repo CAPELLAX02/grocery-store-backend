@@ -1,7 +1,7 @@
 package com.capellax.grocery_app_backend.controller;
 
 import com.capellax.grocery_app_backend.model.Product;
-import com.capellax.grocery_app_backend.service.ProductService;
+import com.capellax.grocery_app_backend.service.product.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

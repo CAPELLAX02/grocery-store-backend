@@ -1,4 +1,4 @@
-package com.capellax.grocery_app_backend.service;
+package com.capellax.grocery_app_backend.service.product;
 
 import com.capellax.grocery_app_backend.model.Product;
 import com.capellax.grocery_app_backend.repository.ProductRepository;
