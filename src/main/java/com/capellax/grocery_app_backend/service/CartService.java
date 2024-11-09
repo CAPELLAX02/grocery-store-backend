@@ -13,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.Optional;
 
@@ -119,9 +121,11 @@ public class CartService {
     private CartResponse buildCartResponse(
             List<CartItem> cartItems
     ) {
-        Double totalPrice = cartItems.stream()
-                .mapToDouble(item -> item.getPrice() * item.getQuantity())
-                .sum();
+        BigDecimal total = cartItems.stream()
+                .map(item -> BigDecimal.valueOf(item.getPrice()).multiply(BigDecimal.valueOf(item.getQuantity())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        Double totalPrice = total.setScale(2, RoundingMode.HALF_UP).doubleValue();
 
         CartResponse response = new CartResponse();
         response.setCartItems(cartItems);
