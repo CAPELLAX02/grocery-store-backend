@@ -41,10 +41,7 @@ public class AuthenticationService {
         Optional<User> existingUser = userRepository.findByEmail(registerRequest.getEmail());
 
         if (existingUser.isPresent()) {
-            User user = existingUser.get();
-            if (user.isEnabled()) {
                 return ApiResponse.error("User already registered and activated.", HttpStatus.CONFLICT);
-            }
         }
 
         User user = new User();
