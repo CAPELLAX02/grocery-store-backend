@@ -18,16 +18,12 @@ public class CartServiceUtils {
 
     private final UserRepository userRepository;
 
-    protected User getUserByUsername(
-            String username
-    ) {
+    protected User getUserByUsername(String username) {
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException(username));
     }
 
-    protected CartResponse buildCartResponse(
-            List<CartItem> cartItems
-    ) {
+    protected CartResponse buildCartResponse(List<CartItem> cartItems) {
         BigDecimal total = cartItems.stream()
                 .map(item -> BigDecimal.valueOf(item.getPrice()).multiply(BigDecimal.valueOf(item.getQuantity())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);

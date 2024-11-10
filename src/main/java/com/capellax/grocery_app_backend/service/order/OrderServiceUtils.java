@@ -2,13 +2,14 @@ package com.capellax.grocery_app_backend.service.order;
 
 import com.capellax.grocery_app_backend.dto.response.order.OrderItemResponse;
 import com.capellax.grocery_app_backend.dto.response.order.OrderResponse;
+import com.capellax.grocery_app_backend.exception.custom.CustomRuntimeException;
+import com.capellax.grocery_app_backend.exception.enums.ErrorType;
 import com.capellax.grocery_app_backend.model.CartItem;
 import com.capellax.grocery_app_backend.model.Order;
 import com.capellax.grocery_app_backend.model.OrderItem;
 import com.capellax.grocery_app_backend.model.User;
 import com.capellax.grocery_app_backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -21,9 +22,7 @@ public class OrderServiceUtils {
 
     private final UserRepository userRepository;
 
-    protected OrderItem convertToOrderItem(
-            CartItem cartItem
-    ) {
+    protected OrderItem convertToOrderItem(CartItem cartItem) {
         OrderItem orderItem = new OrderItem();
         orderItem.setProductId(cartItem.getProductId());
         orderItem.setProductName(cartItem.getProductName());
@@ -32,29 +31,23 @@ public class OrderServiceUtils {
         return orderItem;
     }
 
-    protected Double calculateTotalAmount(
-            List<CartItem> cartItems
-    ) {
+    protected Double calculateTotalAmount(List<CartItem> cartItems) {
         return cartItems.stream()
                 .map(item -> BigDecimal.valueOf(item.getPrice()).multiply(BigDecimal.valueOf(item.getQuantity())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add)
                 .setScale(2, RoundingMode.HALF_UP).doubleValue();
     }
 
-    protected User getUserByUsername(
-            String username
-    ) {
+    protected User getUserByUsername(String username) {
         return userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException(username));
+                .orElseThrow(() -> new CustomRuntimeException(ErrorType.USER_NOT_FOUND));
     }
 
     protected String generateOrderId() {
         return "ORD-" + System.currentTimeMillis();
     }
 
-    protected OrderResponse buildOrderResponse(
-            Order order
-    ) {
+    protected OrderResponse buildOrderResponse(Order order) {
         OrderResponse response = new OrderResponse();
         response.setOrderId(order.getOrderId());
         response.setDate(order.getDate());
@@ -66,9 +59,7 @@ public class OrderServiceUtils {
         return response;
     }
 
-    protected OrderItemResponse buildOrderItemResponse(
-            OrderItem orderItem
-    ) {
+    protected OrderItemResponse buildOrderItemResponse(OrderItem orderItem) {
         OrderItemResponse response = new OrderItemResponse();
         response.setProductId(orderItem.getProductId());
         response.setProductName(orderItem.getProductName());

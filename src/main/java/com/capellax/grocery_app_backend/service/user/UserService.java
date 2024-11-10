@@ -22,14 +22,7 @@ public class UserService {
             String username
     ) {
         User user = userServiceUtils.getUserByUsername(username);
-
-        GetUserProfileResponse response = new GetUserProfileResponse();
-        response.setUsername(user.getUsername());
-        response.setEmail(user.getEmail());
-        response.setPassword(user.getPassword());
-        response.setCart(user.getCart());
-        response.setOrders(user.getOrders());
-
+        GetUserProfileResponse response = userServiceUtils.buildUserProfileResponse(user);
         return ApiResponse.success(response, "User profile fetched successfully.");
     }
 

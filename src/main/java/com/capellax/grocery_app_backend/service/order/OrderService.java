@@ -2,12 +2,13 @@ package com.capellax.grocery_app_backend.service.order;
 
 import com.capellax.grocery_app_backend.dto.response.order.OrderListResponse;
 import com.capellax.grocery_app_backend.dto.response.order.OrderResponse;
+import com.capellax.grocery_app_backend.exception.custom.CustomRuntimeException;
+import com.capellax.grocery_app_backend.exception.enums.ErrorType;
 import com.capellax.grocery_app_backend.model.Order;
 import com.capellax.grocery_app_backend.model.User;
 import com.capellax.grocery_app_backend.repository.UserRepository;
 import com.capellax.grocery_app_backend.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -26,7 +27,7 @@ public class OrderService {
         User user = orderServiceUtils.getUserByUsername(username);
 
         if (user.getCart() == null || user.getCart().isEmpty()) {
-            return ApiResponse.error("Cart is empty. Cannot create an order.", HttpStatus.BAD_REQUEST);
+            throw new CustomRuntimeException(ErrorType.CART_IS_EMPTY);
         }
 
         Order order = new Order();
@@ -52,7 +53,7 @@ public class OrderService {
         User user = orderServiceUtils.getUserByUsername(username);
 
         if (user.getOrders() == null || user.getOrders().isEmpty()) {
-            return ApiResponse.error("No orders found for this user.", HttpStatus.NOT_FOUND);
+            throw new CustomRuntimeException(ErrorType.ORDERS_NOT_FOUND);
         }
 
         List<OrderResponse> orders = user.getOrders()
@@ -65,7 +66,6 @@ public class OrderService {
         return ApiResponse.success(response, "Orders fetched successfully.");
     }
 
-
     public ApiResponse<OrderResponse> getMyOrderById(
             String username,
             String orderId
@@ -76,7 +76,7 @@ public class OrderService {
                 .stream()
                 .filter(o -> o.getOrderId().equals(orderId))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("Order not found."));
+                .orElseThrow(() -> new CustomRuntimeException(ErrorType.ORDER_NOT_FOUND));
 
         OrderResponse response = orderServiceUtils.buildOrderResponse(order);
         return ApiResponse.success(response, "Order fetched successfully.");

@@ -8,7 +8,6 @@ import com.capellax.grocery_app_backend.exception.enums.ErrorType;
 import com.capellax.grocery_app_backend.model.CartItem;
 import com.capellax.grocery_app_backend.model.Product;
 import com.capellax.grocery_app_backend.model.User;
-import com.capellax.grocery_app_backend.repository.ProductRepository;
 import com.capellax.grocery_app_backend.repository.UserRepository;
 import com.capellax.grocery_app_backend.response.ApiResponse;
 import com.capellax.grocery_app_backend.service.product.ProductService;
@@ -25,7 +24,6 @@ public class CartService {
     private final UserRepository userRepository;
     private final ProductService productService;
     private final CartServiceUtils cartServiceUtils;
-    private final ProductRepository productRepository;
 
     public ApiResponse<CartResponse> getCart(
             String username
