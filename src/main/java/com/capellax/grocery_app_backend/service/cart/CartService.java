@@ -25,8 +25,6 @@ public class CartService {
     private final ProductService productService;
     private final CartServiceUtils cartServiceUtils;
 
-    // TODO: Return "cart" as data in every cart service method.
-
     public ApiResponse<CartResponse> getCart(
             String username
     ) {
@@ -35,7 +33,7 @@ public class CartService {
         return ApiResponse.success(cartResponse, "Cart fetched successfully");
     }
 
-    public ApiResponse<String> addItemToCart(
+    public ApiResponse<CartResponse> addItemToCart(
             String username,
             AddItemToCartRequest request
     ) {
@@ -63,10 +61,12 @@ public class CartService {
 
         userRepository.save(user);
 
-        return ApiResponse.success(null, "Item added to cart successfully");
+        CartResponse updatedCartResponse = cartServiceUtils.buildCartResponse(user.getCart());
+
+        return ApiResponse.success(updatedCartResponse, "Item added to cart successfully");
     }
 
-    public ApiResponse<String> updateCartItemQuantity(
+    public ApiResponse<CartResponse> updateCartItemQuantity(
             String username,
             UpdateCartItemRequest request
     ) {
@@ -81,11 +81,11 @@ public class CartService {
         item.setQuantity(request.getQuantity());
 
         userRepository.save(user);
-
-        return ApiResponse.success(null, "Cart item quantity updated successfully");
+        CartResponse updatedCartResponse = cartServiceUtils.buildCartResponse(user.getCart());
+        return ApiResponse.success(updatedCartResponse, "Cart item quantity updated successfully");
     }
 
-    public ApiResponse<String> removeItemFromCart(
+    public ApiResponse<CartResponse> removeItemFromCart(
             String username,
             String productId
     ) {
@@ -98,17 +98,18 @@ public class CartService {
         }
 
         userRepository.save(user);
-
-        return ApiResponse.success(null, "Product removed from cart successfully.");
+        CartResponse updatedCartResponse = cartServiceUtils.buildCartResponse(user.getCart());
+        return ApiResponse.success(updatedCartResponse, "Product removed from cart successfully.");
     }
 
-    public ApiResponse<String> clearCart(
+    public ApiResponse<CartResponse> clearCart(
             String username
     ) {
         User user = cartServiceUtils.getUserByUsername(username);
         user.getCart().clear();
         userRepository.save(user);
-        return ApiResponse.success(null, "Cart cleared successfully");
+        CartResponse clearedCartResponse = cartServiceUtils.buildCartResponse(user.getCart());
+        return ApiResponse.success(clearedCartResponse, "Cart cleared successfully");
     }
 
 }

@@ -29,41 +29,41 @@ public class CartController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<ApiResponse<String>> addItemToCart(
+    public ResponseEntity<ApiResponse<CartResponse>> addItemToCart(
             @Valid @RequestBody AddItemToCartRequest request,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
         String username = userDetails.getUsername();
-        ApiResponse<String> response = cartService.addItemToCart(username, request);
+        ApiResponse<CartResponse> response = cartService.addItemToCart(username, request);
         return ResponseEntity.status(response.getStatus()).body(response);
     }
 
     @PutMapping("/update")
-    public ResponseEntity<ApiResponse<String>> updateCartItemQuantity(
+    public ResponseEntity<ApiResponse<CartResponse>> updateCartItemQuantity(
             @Valid @RequestBody UpdateCartItemRequest request,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
         String username = userDetails.getUsername();
-        ApiResponse<String> response = cartService.updateCartItemQuantity(username, request);
+        ApiResponse<CartResponse> response = cartService.updateCartItemQuantity(username, request);
         return ResponseEntity.status(response.getStatus()).body(response);
     }
 
     @DeleteMapping("/remove/{productId}")
-    public ResponseEntity<ApiResponse<String>> removeItemFromCart(
+    public ResponseEntity<ApiResponse<CartResponse>> removeItemFromCart(
             @PathVariable String productId,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
         String username = userDetails.getUsername();
-        ApiResponse<String> response = cartService.removeItemFromCart(username, productId);
+        ApiResponse<CartResponse> response = cartService.removeItemFromCart(username, productId);
         return ResponseEntity.status(response.getStatus()).body(response);
     }
 
     @DeleteMapping("/clear")
-    public ResponseEntity<ApiResponse<String>> clearCart(
+    public ResponseEntity<ApiResponse<CartResponse>> clearCart(
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
         String username = userDetails.getUsername();
-        ApiResponse<String> response = cartService.clearCart(username);
+        ApiResponse<CartResponse> response = cartService.clearCart(username);
         return ResponseEntity.status(response.getStatus()).body(response);
     }
 
