@@ -22,7 +22,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-import java.util.Random;
 
 @Slf4j
 @Service
@@ -34,6 +33,7 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final MailService mailService;
     private final JwtService jwtService;
+    private final AuthenticationServiceUtils authenticationServiceUtils;
 
     public ApiResponse<RegisterResponse> registerUser(
             RegisterRequest registerRequest
@@ -49,7 +49,7 @@ public class AuthenticationService {
         user.setEmail(registerRequest.getEmail());
         user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
 
-        String activationCode = generateActivationCode();
+        String activationCode = authenticationServiceUtils.generateActivationCode();
         user.setActivationCode(activationCode);
         user.setEnabled(false);
 
@@ -63,12 +63,6 @@ public class AuthenticationService {
         response.setMessage("Please check your email (" + user.getEmail() + ") for the activation code");
 
         return ApiResponse.success(response, "User registered successfully. Activation code sent via email.");
-    }
-
-    private String generateActivationCode() {
-        Random random = new Random();
-        int code = 100000 + random.nextInt(100000);
-        return String.valueOf(code);
     }
 
     public ApiResponse<String> activateUser(
@@ -138,7 +132,7 @@ public class AuthenticationService {
 
         User user = userOptional.get();
 
-        String resetPasswordCode = generateResetPasswordCode();
+        String resetPasswordCode = authenticationServiceUtils.generateResetPasswordCode();
         user.setActivationCode(resetPasswordCode); // maybe .setResetPasswordCode later on
         userRepository.save(user);
 
@@ -152,12 +146,6 @@ public class AuthenticationService {
         response.setMessage("Password reset code sent to " + user.getEmail());
 
         return ApiResponse.success(response, "Password reset code sent successfully.");
-    }
-
-    private String generateResetPasswordCode() {
-        Random random = new Random();
-        int code = 100000 + random.nextInt(100000);
-        return String.valueOf(code);
     }
 
     public ApiResponse<ResetPasswordResponse> resetPassword(
