@@ -4,7 +4,7 @@ import com.capellax.grocery_app_backend.dto.request.cart.AddItemToCartRequest;
 import com.capellax.grocery_app_backend.dto.request.cart.UpdateCartItemRequest;
 import com.capellax.grocery_app_backend.dto.response.cart.CartResponse;
 import com.capellax.grocery_app_backend.exception.custom.CustomRuntimeException;
-import com.capellax.grocery_app_backend.exception.enums.ErrorType;
+import com.capellax.grocery_app_backend.exception.enums.ErrorCode;
 import com.capellax.grocery_app_backend.model.CartItem;
 import com.capellax.grocery_app_backend.model.Product;
 import com.capellax.grocery_app_backend.model.User;
@@ -41,7 +41,7 @@ public class CartService {
     ) {
         User user = cartServiceUtils.getUserByUsername(username);
         Product product = Optional.ofNullable(productService.getProductById(request.getProductId()))
-                .orElseThrow(() -> new CustomRuntimeException(ErrorType.PRODUCT_NOT_FOUND));
+                .orElseThrow(() -> new CustomRuntimeException(ErrorCode.PRODUCT_NOT_FOUND));
 
         List<CartItem> cart = user.getCart();
         Optional<CartItem> existingItem = cart.stream()
@@ -76,7 +76,7 @@ public class CartService {
         CartItem item = cart.stream()
                 .filter(cartItem -> cartItem.getProductId().equals(request.getProductId()))
                 .findFirst()
-                .orElseThrow(() -> new CustomRuntimeException(ErrorType.CART_ITEM_NOT_FOUND));
+                .orElseThrow(() -> new CustomRuntimeException(ErrorCode.CART_ITEM_NOT_FOUND));
 
         item.setQuantity(request.getQuantity());
 
@@ -94,7 +94,7 @@ public class CartService {
                 .removeIf(item -> item.getProductId().equals(productId));
 
         if (!removed) {
-            throw new CustomRuntimeException(ErrorType.CART_ITEM_NOT_FOUND);
+            throw new CustomRuntimeException(ErrorCode.CART_ITEM_NOT_FOUND);
         }
 
         userRepository.save(user);

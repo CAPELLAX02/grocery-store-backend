@@ -1,7 +1,7 @@
 package com.capellax.grocery_app_backend.service.jwt;
 
 import com.capellax.grocery_app_backend.exception.custom.CustomRuntimeException;
-import com.capellax.grocery_app_backend.exception.enums.ErrorType;
+import com.capellax.grocery_app_backend.exception.enums.ErrorCode;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -30,7 +30,7 @@ public class JwtService {
             return claimsResolver.apply(claims);
 
         } catch (CustomRuntimeException e) {
-            throw new CustomRuntimeException(ErrorType.INVALID_TOKEN);
+            throw new CustomRuntimeException(ErrorCode.INVALID_TOKEN);
         }
     }
 

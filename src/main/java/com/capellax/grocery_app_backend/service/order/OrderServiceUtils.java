@@ -3,7 +3,7 @@ package com.capellax.grocery_app_backend.service.order;
 import com.capellax.grocery_app_backend.dto.response.order.OrderItemResponse;
 import com.capellax.grocery_app_backend.dto.response.order.OrderResponse;
 import com.capellax.grocery_app_backend.exception.custom.CustomRuntimeException;
-import com.capellax.grocery_app_backend.exception.enums.ErrorType;
+import com.capellax.grocery_app_backend.exception.enums.ErrorCode;
 import com.capellax.grocery_app_backend.model.CartItem;
 import com.capellax.grocery_app_backend.model.Order;
 import com.capellax.grocery_app_backend.model.OrderItem;
@@ -40,7 +40,7 @@ public class OrderServiceUtils {
 
     protected User getUserByUsername(String username) {
         return userRepository.findByUsername(username)
-                .orElseThrow(() -> new CustomRuntimeException(ErrorType.USER_NOT_FOUND));
+                .orElseThrow(() -> new CustomRuntimeException(ErrorCode.USER_NOT_FOUND));
     }
 
     protected String generateOrderId() {

@@ -9,17 +9,12 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 public class GlobalExceptionUtils {
 
     public HttpStatus getHttpStatus(Exception exception, HttpStatus defaultStatus) {
-
-        if (exception instanceof MethodArgumentNotValidException) {
-            return HttpStatus.BAD_REQUEST;
-        }
-
+        if (exception instanceof MethodArgumentNotValidException) return HttpStatus.BAD_REQUEST;
         if (exception instanceof CustomRuntimeException customException) {
-            return customException.getErrorType() != null
-                    ? customException.getErrorType().getStatus()
+            return customException.getErrorCode() != null
+                    ? customException.getErrorCode().getStatus()
                     : defaultStatus;
         }
-
         return defaultStatus;
     }
 

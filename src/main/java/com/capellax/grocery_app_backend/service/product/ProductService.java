@@ -1,7 +1,7 @@
 package com.capellax.grocery_app_backend.service.product;
 
 import com.capellax.grocery_app_backend.exception.custom.CustomRuntimeException;
-import com.capellax.grocery_app_backend.exception.enums.ErrorType;
+import com.capellax.grocery_app_backend.exception.enums.ErrorCode;
 import com.capellax.grocery_app_backend.model.Product;
 import com.capellax.grocery_app_backend.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,14 +18,14 @@ public class ProductService {
 
     public List<Product> getAllProducts() {
         return Optional.of(productRepository.findAll())
-                .orElseThrow(() -> new CustomRuntimeException(ErrorType.PRODUCT_NOT_FOUND));
+                .orElseThrow(() -> new CustomRuntimeException(ErrorCode.PRODUCT_NOT_FOUND));
     }
 
     public Product getProductById(
             String id
     ) {
         return productRepository.findById(id)
-                .orElseThrow(() -> new CustomRuntimeException(ErrorType.PRODUCTS_NOT_FOUND));
+                .orElseThrow(() -> new CustomRuntimeException(ErrorCode.PRODUCTS_NOT_FOUND));
     }
 
 }

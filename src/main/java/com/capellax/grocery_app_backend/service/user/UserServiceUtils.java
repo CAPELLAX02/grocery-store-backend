@@ -2,7 +2,7 @@ package com.capellax.grocery_app_backend.service.user;
 
 import com.capellax.grocery_app_backend.dto.response.user.GetUserProfileResponse;
 import com.capellax.grocery_app_backend.exception.custom.CustomRuntimeException;
-import com.capellax.grocery_app_backend.exception.enums.ErrorType;
+import com.capellax.grocery_app_backend.exception.enums.ErrorCode;
 import com.capellax.grocery_app_backend.model.User;
 import com.capellax.grocery_app_backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,7 @@ public class UserServiceUtils {
 
     protected User getUserByUsername(String username) {
         return userRepository.findByUsername(username)
-                .orElseThrow(() -> new CustomRuntimeException(ErrorType.USER_NOT_FOUND));
+                .orElseThrow(() -> new CustomRuntimeException(ErrorCode.USER_NOT_FOUND));
     }
 
     protected GetUserProfileResponse buildUserProfileResponse(User user) {

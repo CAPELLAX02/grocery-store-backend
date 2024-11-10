@@ -3,7 +3,7 @@ package com.capellax.grocery_app_backend.service.order;
 import com.capellax.grocery_app_backend.dto.response.order.OrderListResponse;
 import com.capellax.grocery_app_backend.dto.response.order.OrderResponse;
 import com.capellax.grocery_app_backend.exception.custom.CustomRuntimeException;
-import com.capellax.grocery_app_backend.exception.enums.ErrorType;
+import com.capellax.grocery_app_backend.exception.enums.ErrorCode;
 import com.capellax.grocery_app_backend.model.Order;
 import com.capellax.grocery_app_backend.model.User;
 import com.capellax.grocery_app_backend.repository.UserRepository;
@@ -27,7 +27,7 @@ public class OrderService {
         User user = orderServiceUtils.getUserByUsername(username);
 
         if (user.getCart() == null || user.getCart().isEmpty()) {
-            throw new CustomRuntimeException(ErrorType.CART_IS_EMPTY);
+            throw new CustomRuntimeException(ErrorCode.CART_IS_EMPTY);
         }
 
         Order order = new Order();
@@ -53,7 +53,7 @@ public class OrderService {
         User user = orderServiceUtils.getUserByUsername(username);
 
         if (user.getOrders() == null || user.getOrders().isEmpty()) {
-            throw new CustomRuntimeException(ErrorType.ORDERS_NOT_FOUND);
+            throw new CustomRuntimeException(ErrorCode.ORDERS_NOT_FOUND);
         }
 
         List<OrderResponse> orders = user.getOrders()
@@ -76,7 +76,7 @@ public class OrderService {
                 .stream()
                 .filter(o -> o.getOrderId().equals(orderId))
                 .findFirst()
-                .orElseThrow(() -> new CustomRuntimeException(ErrorType.ORDER_NOT_FOUND));
+                .orElseThrow(() -> new CustomRuntimeException(ErrorCode.ORDER_NOT_FOUND));
 
         OrderResponse response = orderServiceUtils.buildOrderResponse(order);
         return ApiResponse.success(response, "Order fetched successfully.");

@@ -6,7 +6,7 @@ import com.capellax.grocery_app_backend.dto.response.auth.LoginResponse;
 import com.capellax.grocery_app_backend.dto.response.auth.RegisterResponse;
 import com.capellax.grocery_app_backend.dto.response.auth.ResetPasswordResponse;
 import com.capellax.grocery_app_backend.exception.custom.CustomRuntimeException;
-import com.capellax.grocery_app_backend.exception.enums.ErrorType;
+import com.capellax.grocery_app_backend.exception.enums.ErrorCode;
 import com.capellax.grocery_app_backend.model.User;
 import com.capellax.grocery_app_backend.repository.UserRepository;
 import com.capellax.grocery_app_backend.response.ApiResponse;
@@ -40,7 +40,7 @@ public class AuthenticationService {
         Optional<User> existingUser = userRepository.findByEmail(request.getEmail());
 
         if (existingUser.isPresent()) {
-            throw new CustomRuntimeException(ErrorType.USER_ALREADY_EXISTS);
+            throw new CustomRuntimeException(ErrorCode.USER_ALREADY_EXISTS);
         }
 
         User user = new User();
@@ -72,10 +72,10 @@ public class AuthenticationService {
             ActivateAccountRequest request
     ) {
         User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new CustomRuntimeException(ErrorType.USER_NOT_FOUND));
+                .orElseThrow(() -> new CustomRuntimeException(ErrorCode.USER_NOT_FOUND));
 
         if (!user.getActivationCode().equals(request.getActivationCode())) {
-            throw new CustomRuntimeException(ErrorType.INVALID_ACTIVATION_CODE);
+            throw new CustomRuntimeException(ErrorCode.INVALID_ACTIVATION_CODE);
         }
 
         user.setEnabled(true);
@@ -105,7 +105,7 @@ public class AuthenticationService {
             return ApiResponse.success(response, "Logged in successfully");
 
         } catch (BadCredentialsException e) {
-            throw new CustomRuntimeException(ErrorType.INVALID_CREDENTIALS);
+            throw new CustomRuntimeException(ErrorCode.INVALID_CREDENTIALS);
         }
     }
 
@@ -113,7 +113,7 @@ public class AuthenticationService {
             ForgotPasswordRequest request
     ) {
         User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new CustomRuntimeException(ErrorType.USER_NOT_FOUND));
+                .orElseThrow(() -> new CustomRuntimeException(ErrorCode.USER_NOT_FOUND));
 
         String resetPasswordCode = authenticationServiceUtils.generateResetPasswordCode();
         user.setActivationCode(resetPasswordCode); // maybe .setResetPasswordCode later on
@@ -136,7 +136,7 @@ public class AuthenticationService {
             ResetPasswordRequest request
     ) {
         User user = userRepository.findByActivationCode(request.getResetPasswordCode())
-                .orElseThrow(() -> new CustomRuntimeException(ErrorType.INVALID_RESET_PASSWORD_CODE));
+                .orElseThrow(() -> new CustomRuntimeException(ErrorCode.INVALID_RESET_PASSWORD_CODE));
 
         user.setPassword(passwordEncoder.encode(request.getNewPassword()));
         user.setActivationCode(null);

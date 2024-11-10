@@ -4,7 +4,7 @@ import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 @Getter
-public enum ErrorType {
+public enum ErrorCode {
 
     // AUTHENTICATION ERRORS
     USER_ALREADY_EXISTS("User already exists", HttpStatus.CONFLICT),
@@ -47,12 +47,17 @@ public enum ErrorType {
     BAD_REQUEST("Bad request", HttpStatus.BAD_REQUEST),
     UNAUTHORIZED_ACCESS("Unauthorized access", HttpStatus.UNAUTHORIZED),
     FORBIDDEN("Access denied", HttpStatus.FORBIDDEN),
-    RESOURCE_NOT_FOUND("Resource not found", HttpStatus.NOT_FOUND);
+    RESOURCE_NOT_FOUND("Resource not found", HttpStatus.NOT_FOUND),
+    REQUEST_TIMEOUT("Request timed out", HttpStatus.REQUEST_TIMEOUT),
+    UNSUPPORTED_MEDIA_TYPE("Unsupported media type", HttpStatus.UNSUPPORTED_MEDIA_TYPE),
+    RATE_LIMIT_EXCEEDED("Rate limit exceeded", HttpStatus.TOO_MANY_REQUESTS),
+    PAYMENT_REQUIRED("Payment required", HttpStatus.PAYMENT_REQUIRED),
+    METHOD_NOT_ALLOWED("Method (GET/POST/PUT/PATCH/DELETE) not allowed.", HttpStatus.METHOD_NOT_ALLOWED);
 
     private final String message;
     private final HttpStatus status;
 
-    ErrorType(String message, HttpStatus status) {
+    ErrorCode(String message, HttpStatus status) {
         this.message = message;
         this.status = status;
     }

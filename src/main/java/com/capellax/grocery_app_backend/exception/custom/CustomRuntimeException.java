@@ -1,16 +1,16 @@
 package com.capellax.grocery_app_backend.exception.custom;
 
-import com.capellax.grocery_app_backend.exception.enums.ErrorType;
+import com.capellax.grocery_app_backend.exception.enums.ErrorCode;
 import lombok.Getter;
 
 @Getter
 public class CustomRuntimeException extends RuntimeException {
 
-    private final ErrorType errorType;
+    private final ErrorCode errorCode;
 
-    public CustomRuntimeException(ErrorType errorType) {
-        super(errorType.getMessage());
-        this.errorType = errorType;
+    public CustomRuntimeException(ErrorCode errorCode) {
+        super(errorCode.getMessage());
+        this.errorCode = errorCode;
     }
 
 }
