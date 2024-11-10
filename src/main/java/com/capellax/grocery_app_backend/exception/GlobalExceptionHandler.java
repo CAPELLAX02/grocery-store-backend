@@ -49,5 +49,15 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @ExceptionHandler(CustomRuntimeException.class)
+    public ResponseEntity<ApiResponse<Object>> handleCustomRuntimeException(
+            CustomRuntimeException exception
+    ) {
+        ApiResponse<Object> response = ApiResponse.error(
+                exception.getMessage(),
+                exception.getErrorType().getStatus()
+        );
+        return new ResponseEntity<>(response, exception.getErrorType().getStatus());
+    }
 
 }
