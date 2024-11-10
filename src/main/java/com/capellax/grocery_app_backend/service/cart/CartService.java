@@ -25,6 +25,8 @@ public class CartService {
     private final ProductService productService;
     private final CartServiceUtils cartServiceUtils;
 
+    // TODO: Return "cart" as data in every cart service method.
+
     public ApiResponse<CartResponse> getCart(
             String username
     ) {
