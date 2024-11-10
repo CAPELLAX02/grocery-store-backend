@@ -1,8 +1,10 @@
 package com.capellax.grocery_app_backend.service.mail;
 
+import com.capellax.grocery_app_backend.exception.custom.CustomMailException;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
+import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
@@ -23,16 +25,8 @@ public class MailServiceUtils {
             String subject,
             String templateName
     ) {
-        String content = buildEmailContent(
-                templateName,
-                username,
-                code
-        );
-        sendEmail(
-                to,
-                subject,
-                content
-        );
+        String content = buildEmailContent(templateName, username, code);
+        sendEmail(to, subject, content);
     }
 
     protected String buildEmailContent(
@@ -50,7 +44,7 @@ public class MailServiceUtils {
             String to,
             String subject,
             String content
-    ) {
+    ) throws MailException {
         try {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
@@ -59,8 +53,8 @@ public class MailServiceUtils {
             helper.setText(content, true);
             mailSender.send(message);
 
-        } catch (MessagingException exception) {
-            throw new RuntimeException("Failed to send email", exception);
+        } catch (MailException | MessagingException e) {
+            throw new CustomMailException("Failed to send reset password code", e);
         }
     }
 

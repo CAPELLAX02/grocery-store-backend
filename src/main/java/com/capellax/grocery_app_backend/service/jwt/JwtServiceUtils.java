@@ -1,5 +1,7 @@
 package com.capellax.grocery_app_backend.service.jwt;
 
+import com.capellax.grocery_app_backend.exception.custom.CustomRuntimeException;
+import com.capellax.grocery_app_backend.exception.enums.ErrorType;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -22,9 +24,7 @@ public class JwtServiceUtils {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    protected Claims extractAllClaimsFromToken(
-            String token
-    ) {
+    protected Claims extractAllClaimsFromToken(String token) {
         try {
             return Jwts.parserBuilder()
                     .setSigningKey(getSigningKey())
@@ -32,8 +32,8 @@ public class JwtServiceUtils {
                     .parseClaimsJws(token)
                     .getBody();
 
-        } catch (Exception exception) {
-            throw new RuntimeException("Invalid or expired token");
+        } catch (Exception e) {
+            throw new CustomRuntimeException(ErrorType.INVALID_TOKEN);
         }
     }
 

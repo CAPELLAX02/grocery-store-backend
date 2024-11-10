@@ -1,5 +1,7 @@
 package com.capellax.grocery_app_backend.service.jwt;
 
+import com.capellax.grocery_app_backend.exception.custom.CustomRuntimeException;
+import com.capellax.grocery_app_backend.exception.enums.ErrorType;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -23,8 +25,13 @@ public class JwtService {
     private Long jwtExpiration;
 
     public <T> T extractClaimsFromToken(String token, Function<Claims, T> claimsResolver) {
-        final Claims claims = jwtServiceUtils.extractAllClaimsFromToken(token);
-        return claimsResolver.apply(claims);
+        try {
+            final Claims claims = jwtServiceUtils.extractAllClaimsFromToken(token);
+            return claimsResolver.apply(claims);
+
+        } catch (CustomRuntimeException e) {
+            throw new CustomRuntimeException(ErrorType.INVALID_TOKEN);
+        }
     }
 
     public String extractUsernameFromToken(String token) {

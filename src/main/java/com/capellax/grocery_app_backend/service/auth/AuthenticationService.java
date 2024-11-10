@@ -38,7 +38,7 @@ public class AuthenticationService {
 
     public ApiResponse<RegisterResponse> registerUser(
             RegisterRequest request
-    ) throws MessagingException {
+    ) {
         Optional<User> existingUser = userRepository.findByEmail(request.getEmail());
 
         if (existingUser.isPresent()) {
@@ -56,16 +56,11 @@ public class AuthenticationService {
 
         userRepository.save(user);
 
-        try {
-            mailService.sendActivationCode(
-                    user.getEmail(),
-                    user.getUsername(),
-                    activationCode
-            );
-
-        } catch (MailException e) {
-            throw new MessagingException("Failed to send activation code", e);
-        }
+        mailService.sendActivationCode(
+                user.getEmail(),
+                user.getUsername(),
+                activationCode
+        );
 
         RegisterResponse response = new RegisterResponse();
         response.setUserId(user.getId());
@@ -118,7 +113,7 @@ public class AuthenticationService {
 
     public ApiResponse<ForgotPasswordResponse> forgotPassword(
             ForgotPasswordRequest request
-    ) throws MessagingException {
+    ) {
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new CustomRuntimeException(ErrorType.USER_NOT_FOUND));
 
@@ -127,16 +122,11 @@ public class AuthenticationService {
 
         userRepository.save(user);
 
-        try {
-            mailService.sendResetPasswordCode(
-                    user.getEmail(),
-                    user.getUsername(),
-                    resetPasswordCode
-            );
-
-        } catch (MailException e) {
-            throw new MessagingException("Failed to send reset password code", e);
-        }
+        mailService.sendResetPasswordCode(
+                user.getEmail(),
+                user.getUsername(),
+                resetPasswordCode
+        );
 
         ForgotPasswordResponse response = new ForgotPasswordResponse();
         response.setMessage("Password reset code sent to " + user.getEmail());

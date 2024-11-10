@@ -3,14 +3,16 @@ package com.capellax.grocery_app_backend.service.cart;
 import com.capellax.grocery_app_backend.dto.request.cart.AddItemToCartRequest;
 import com.capellax.grocery_app_backend.dto.request.cart.UpdateCartItemRequest;
 import com.capellax.grocery_app_backend.dto.response.cart.CartResponse;
+import com.capellax.grocery_app_backend.exception.custom.CustomRuntimeException;
+import com.capellax.grocery_app_backend.exception.enums.ErrorType;
 import com.capellax.grocery_app_backend.model.CartItem;
 import com.capellax.grocery_app_backend.model.Product;
 import com.capellax.grocery_app_backend.model.User;
+import com.capellax.grocery_app_backend.repository.ProductRepository;
 import com.capellax.grocery_app_backend.repository.UserRepository;
 import com.capellax.grocery_app_backend.response.ApiResponse;
 import com.capellax.grocery_app_backend.service.product.ProductService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,6 +25,7 @@ public class CartService {
     private final UserRepository userRepository;
     private final ProductService productService;
     private final CartServiceUtils cartServiceUtils;
+    private final ProductRepository productRepository;
 
     public ApiResponse<CartResponse> getCart(
             String username
@@ -37,7 +40,8 @@ public class CartService {
             AddItemToCartRequest request
     ) {
         User user = cartServiceUtils.getUserByUsername(username);
-        Product product = productService.getProductById(request.getProductId());
+        Product product = Optional.ofNullable(productService.getProductById(request.getProductId()))
+                .orElseThrow(() -> new CustomRuntimeException(ErrorType.PRODUCT_NOT_FOUND));
 
         List<CartItem> cart = user.getCart();
         Optional<CartItem> existingItem = cart.stream()
@@ -59,7 +63,7 @@ public class CartService {
 
         userRepository.save(user);
 
-        return ApiResponse.success(null, "Cart added successfully");
+        return ApiResponse.success(null, "Item added to cart successfully");
     }
 
     public ApiResponse<String> updateCartItemQuantity(
@@ -72,13 +76,13 @@ public class CartService {
         CartItem item = cart.stream()
                 .filter(cartItem -> cartItem.getProductId().equals(request.getProductId()))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("Product not found in cart"));
+                .orElseThrow(() -> new CustomRuntimeException(ErrorType.CART_ITEM_NOT_FOUND));
 
         item.setQuantity(request.getQuantity());
 
         userRepository.save(user);
 
-        return ApiResponse.success(null, "Cart updated successfully");
+        return ApiResponse.success(null, "Cart item quantity updated successfully");
     }
 
     public ApiResponse<String> removeItemFromCart(
@@ -90,7 +94,7 @@ public class CartService {
                 .removeIf(item -> item.getProductId().equals(productId));
 
         if (!removed) {
-            return ApiResponse.error("Product not found in cart", HttpStatus.NOT_FOUND);
+            throw new CustomRuntimeException(ErrorType.CART_ITEM_NOT_FOUND);
         }
 
         userRepository.save(user);

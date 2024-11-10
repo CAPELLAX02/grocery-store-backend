@@ -33,7 +33,7 @@ public enum ErrorType {
     PRODUCT_OUT_OF_STOCK("Product out of stock", HttpStatus.BAD_REQUEST),
 
     // MAIL ERRORS
-    // are going to be thrown as "MessagingException" signature when methods are defined
+    // are going to be thrown as separate "custom mail exceptions" signatures when methods are defined
 
     // USER ERRORS
     USER_UPDATE_FAILED("Failed to update user profile", HttpStatus.INTERNAL_SERVER_ERROR),
