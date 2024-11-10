@@ -7,6 +7,7 @@ import com.capellax.grocery_app_backend.dto.response.auth.RegisterResponse;
 import com.capellax.grocery_app_backend.dto.response.auth.ResetPasswordResponse;
 import com.capellax.grocery_app_backend.response.ApiResponse;
 import com.capellax.grocery_app_backend.service.auth.AuthenticationService;
+import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +26,7 @@ public class AuthenticationController {
     @PostMapping("/register")
     public ResponseEntity<ApiResponse<RegisterResponse>> registerUser(
             @Valid @RequestBody RegisterRequest request
-    ) {
+    ) throws MessagingException {
         ApiResponse<RegisterResponse> response = authenticationService.registerUser(request);
         return ResponseEntity.status(response.getStatus()).body(response);
     }
@@ -49,7 +50,7 @@ public class AuthenticationController {
     @PostMapping("/forgotPassword")
     public ResponseEntity<ApiResponse<ForgotPasswordResponse>> forgotPassword(
             @Valid @RequestBody ForgotPasswordRequest request
-    ) {
+    ) throws MessagingException {
         ApiResponse<ForgotPasswordResponse> response = authenticationService.forgotPassword(request);
         return ResponseEntity.status(response.getStatus()).body(response);
     }

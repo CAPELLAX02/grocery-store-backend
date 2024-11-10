@@ -1,4 +1,4 @@
-package com.capellax.grocery_app_backend.exception;
+package com.capellax.grocery_app_backend.exception.custom;
 
 import com.capellax.grocery_app_backend.exception.enums.ErrorType;
 import lombok.Getter;

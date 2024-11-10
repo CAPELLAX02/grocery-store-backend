@@ -1,5 +1,6 @@
 package com.capellax.grocery_app_backend.exception;
 
+import com.capellax.grocery_app_backend.exception.custom.CustomRuntimeException;
 import com.capellax.grocery_app_backend.response.ApiResponse;
 import com.capellax.grocery_app_backend.response.ErrorDetails;
 import org.springframework.http.HttpStatus;

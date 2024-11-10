@@ -5,14 +5,16 @@ import com.capellax.grocery_app_backend.dto.response.auth.ForgotPasswordResponse
 import com.capellax.grocery_app_backend.dto.response.auth.LoginResponse;
 import com.capellax.grocery_app_backend.dto.response.auth.RegisterResponse;
 import com.capellax.grocery_app_backend.dto.response.auth.ResetPasswordResponse;
+import com.capellax.grocery_app_backend.exception.custom.CustomRuntimeException;
+import com.capellax.grocery_app_backend.exception.enums.ErrorType;
 import com.capellax.grocery_app_backend.model.User;
 import com.capellax.grocery_app_backend.repository.UserRepository;
 import com.capellax.grocery_app_backend.response.ApiResponse;
 import com.capellax.grocery_app_backend.service.jwt.JwtService;
 import com.capellax.grocery_app_backend.service.mail.MailService;
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
+import org.springframework.mail.MailException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,7 +25,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
@@ -36,18 +37,18 @@ public class AuthenticationService {
     private final AuthenticationServiceUtils authenticationServiceUtils;
 
     public ApiResponse<RegisterResponse> registerUser(
-            RegisterRequest registerRequest
-    ) {
-        Optional<User> existingUser = userRepository.findByEmail(registerRequest.getEmail());
+            RegisterRequest request
+    ) throws MessagingException {
+        Optional<User> existingUser = userRepository.findByEmail(request.getEmail());
 
         if (existingUser.isPresent()) {
-                return ApiResponse.error("User already registered and activated.", HttpStatus.CONFLICT);
+            throw new CustomRuntimeException(ErrorType.USER_ALREADY_EXISTS);
         }
 
         User user = new User();
-        user.setUsername(registerRequest.getUsername());
-        user.setEmail(registerRequest.getEmail());
-        user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
+        user.setUsername(request.getUsername());
+        user.setEmail(request.getEmail());
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
 
         String activationCode = authenticationServiceUtils.generateActivationCode();
         user.setActivationCode(activationCode);
@@ -55,7 +56,16 @@ public class AuthenticationService {
 
         userRepository.save(user);
 
-        mailService.sendActivationCode(user.getEmail(), user.getUsername(), activationCode);
+        try {
+            mailService.sendActivationCode(
+                    user.getEmail(),
+                    user.getUsername(),
+                    activationCode
+            );
+
+        } catch (MailException e) {
+            throw new MessagingException("Failed to send activation code", e);
+        }
 
         RegisterResponse response = new RegisterResponse();
         response.setUserId(user.getId());
@@ -66,38 +76,32 @@ public class AuthenticationService {
     }
 
     public ApiResponse<String> activateUser(
-            ActivateAccountRequest activateAccountRequest
+            ActivateAccountRequest request
     ) {
-        Optional<User> userOptional = userRepository.findByEmail(activateAccountRequest.getEmail());
+        User user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new CustomRuntimeException(ErrorType.USER_NOT_FOUND));
 
-        if (userOptional.isEmpty()) {
-            return ApiResponse.error("User not found", HttpStatus.NOT_FOUND);
+        if (!user.getActivationCode().equals(request.getActivationCode())) {
+            throw new CustomRuntimeException(ErrorType.INVALID_ACTIVATION_CODE);
         }
 
-        User user = userOptional.get();
+        user.setEnabled(true);
+        user.setActivationCode(null);
+        userRepository.save(user);
 
-        if (user.getActivationCode().equals(activateAccountRequest.getActivationCode())) {
-            user.setEnabled(true);
-            user.setActivationCode(null);
-            userRepository.save(user);
-            return ApiResponse.success(null, "Account activated successfully.");
-
-        } else {
-            return ApiResponse.error("Invalid activation code or email.", HttpStatus.BAD_REQUEST);
-        }
+        return ApiResponse.success(null, "Account activated successfully");
     }
 
     public ApiResponse<LoginResponse> loginUser(
-            LoginRequest loginRequest
+            LoginRequest request
     ) {
         try {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
-                            loginRequest.getUsername(),
-                            loginRequest.getPassword()
+                            request.getUsername(),
+                            request.getPassword()
                     )
             );
-
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             String token = jwtService.generateToken(userDetails.getUsername());
 
@@ -108,39 +112,31 @@ public class AuthenticationService {
             return ApiResponse.success(response, "Logged in successfully");
 
         } catch (BadCredentialsException e) {
-            return ApiResponse.error(
-                    "Invalid username or password.",
-                    HttpStatus.BAD_REQUEST
-            );
-
-        } catch (Exception e) {
-            return ApiResponse.error(
-                    "An unexpected error occurred during login. Please try again later.",
-                    HttpStatus.INTERNAL_SERVER_ERROR
-            );
+            throw new CustomRuntimeException(ErrorType.INVALID_CREDENTIALS);
         }
     }
 
     public ApiResponse<ForgotPasswordResponse> forgotPassword(
-            ForgotPasswordRequest forgotPasswordRequest
-    ) {
-        Optional<User> userOptional = userRepository.findByEmail(forgotPasswordRequest.getEmail());
-
-        if (userOptional.isEmpty()) {
-            return ApiResponse.error("User with this email does not exist.", HttpStatus.NOT_FOUND);
-        }
-
-        User user = userOptional.get();
+            ForgotPasswordRequest request
+    ) throws MessagingException {
+        User user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new CustomRuntimeException(ErrorType.USER_NOT_FOUND));
 
         String resetPasswordCode = authenticationServiceUtils.generateResetPasswordCode();
         user.setActivationCode(resetPasswordCode); // maybe .setResetPasswordCode later on
+
         userRepository.save(user);
 
-        mailService.sendResetPasswordCode(
-                user.getEmail(),
-                user.getUsername(),
-                resetPasswordCode
-        );
+        try {
+            mailService.sendResetPasswordCode(
+                    user.getEmail(),
+                    user.getUsername(),
+                    resetPasswordCode
+            );
+
+        } catch (MailException e) {
+            throw new MessagingException("Failed to send reset password code", e);
+        }
 
         ForgotPasswordResponse response = new ForgotPasswordResponse();
         response.setMessage("Password reset code sent to " + user.getEmail());
@@ -149,17 +145,14 @@ public class AuthenticationService {
     }
 
     public ApiResponse<ResetPasswordResponse> resetPassword(
-            ResetPasswordRequest resetPasswordRequest
+            ResetPasswordRequest request
     ) {
-        Optional<User> userOptional = userRepository.findByActivationCode(resetPasswordRequest.getResetPasswordCode());
+        User user = userRepository.findByActivationCode(request.getResetPasswordCode())
+                .orElseThrow(() -> new CustomRuntimeException(ErrorType.INVALID_RESET_PASSWORD_CODE));
 
-        if (userOptional.isEmpty()) {
-            return ApiResponse.error("Invalid or expired reset code.", HttpStatus.BAD_REQUEST);
-        }
-
-        User user = userOptional.get();
-        user.setPassword(passwordEncoder.encode(resetPasswordRequest.getNewPassword()));
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
         user.setActivationCode(null);
+
         userRepository.save(user);
 
         ResetPasswordResponse response = new ResetPasswordResponse();
