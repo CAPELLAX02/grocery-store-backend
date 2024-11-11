@@ -1,6 +1,6 @@
 package com.capellax.grocery_app_backend.repository;
 
-import com.capellax.grocery_app_backend.model.User;
+import com.capellax.grocery_app_backend.model.user.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 

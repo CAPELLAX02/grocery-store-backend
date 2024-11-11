@@ -1,4 +1,4 @@
-package com.capellax.grocery_app_backend.model;
+package com.capellax.grocery_app_backend.model.cart;
 
 import lombok.Data;
 

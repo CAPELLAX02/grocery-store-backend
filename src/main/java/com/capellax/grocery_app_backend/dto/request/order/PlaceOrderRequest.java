@@ -1,6 +1,6 @@
 package com.capellax.grocery_app_backend.dto.request.order;
 
-import com.capellax.grocery_app_backend.model.CartItem;
+import com.capellax.grocery_app_backend.model.cart.CartItem;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 

@@ -2,7 +2,7 @@ package com.capellax.grocery_app_backend.service.product;
 
 import com.capellax.grocery_app_backend.exception.custom.CustomRuntimeException;
 import com.capellax.grocery_app_backend.exception.enums.ErrorCode;
-import com.capellax.grocery_app_backend.model.Product;
+import com.capellax.grocery_app_backend.model.product.Product;
 import com.capellax.grocery_app_backend.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

@@ -1,9 +1,9 @@
-package com.capellax.grocery_app_backend.controller;
+package com.capellax.grocery_app_backend.controller.order;
 
 import com.capellax.grocery_app_backend.dto.response.order.OrderListResponse;
 import com.capellax.grocery_app_backend.dto.response.order.OrderResponse;
 import com.capellax.grocery_app_backend.response.ApiResponse;
-import com.capellax.grocery_app_backend.security.UserDetailsImpl;
+import com.capellax.grocery_app_backend.security.user.UserDetailsImpl;
 import com.capellax.grocery_app_backend.service.order.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

@@ -1,5 +1,6 @@
-package com.capellax.grocery_app_backend.model;
+package com.capellax.grocery_app_backend.model.product;
 
+import com.capellax.grocery_app_backend.model.review.Review;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

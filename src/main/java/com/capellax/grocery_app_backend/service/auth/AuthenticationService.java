@@ -7,7 +7,7 @@ import com.capellax.grocery_app_backend.dto.response.auth.RegisterResponse;
 import com.capellax.grocery_app_backend.dto.response.auth.ResetPasswordResponse;
 import com.capellax.grocery_app_backend.exception.custom.CustomRuntimeException;
 import com.capellax.grocery_app_backend.exception.enums.ErrorCode;
-import com.capellax.grocery_app_backend.model.User;
+import com.capellax.grocery_app_backend.model.user.User;
 import com.capellax.grocery_app_backend.repository.UserRepository;
 import com.capellax.grocery_app_backend.response.ApiResponse;
 import com.capellax.grocery_app_backend.service.jwt.JwtService;

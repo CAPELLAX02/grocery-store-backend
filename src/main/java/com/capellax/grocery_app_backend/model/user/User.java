@@ -1,5 +1,7 @@
-package com.capellax.grocery_app_backend.model;
+package com.capellax.grocery_app_backend.model.user;
 
+import com.capellax.grocery_app_backend.model.cart.CartItem;
+import com.capellax.grocery_app_backend.model.order.Order;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

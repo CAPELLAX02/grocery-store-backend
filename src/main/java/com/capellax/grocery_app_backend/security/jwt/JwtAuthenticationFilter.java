@@ -1,5 +1,6 @@
-package com.capellax.grocery_app_backend.security;
+package com.capellax.grocery_app_backend.security.jwt;
 
+import com.capellax.grocery_app_backend.security.user.UserDetailsServiceImpl;
 import com.capellax.grocery_app_backend.service.jwt.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

@@ -3,7 +3,7 @@ package com.capellax.grocery_app_backend.service.user;
 import com.capellax.grocery_app_backend.dto.request.user.UpdateUserProfileRequest;
 import com.capellax.grocery_app_backend.dto.response.user.GetUserProfileResponse;
 import com.capellax.grocery_app_backend.dto.response.user.UpdateUserProfileResponse;
-import com.capellax.grocery_app_backend.model.User;
+import com.capellax.grocery_app_backend.model.user.User;
 import com.capellax.grocery_app_backend.repository.UserRepository;
 import com.capellax.grocery_app_backend.response.ApiResponse;
 import lombok.RequiredArgsConstructor;

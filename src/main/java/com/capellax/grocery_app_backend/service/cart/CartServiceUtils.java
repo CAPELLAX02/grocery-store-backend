@@ -1,8 +1,8 @@
 package com.capellax.grocery_app_backend.service.cart;
 
 import com.capellax.grocery_app_backend.dto.response.cart.CartResponse;
-import com.capellax.grocery_app_backend.model.CartItem;
-import com.capellax.grocery_app_backend.model.User;
+import com.capellax.grocery_app_backend.model.cart.CartItem;
+import com.capellax.grocery_app_backend.model.user.User;
 import com.capellax.grocery_app_backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

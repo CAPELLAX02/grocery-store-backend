@@ -1,9 +1,9 @@
-package com.capellax.grocery_app_backend.controller;
+package com.capellax.grocery_app_backend.controller.review;
 
 import com.capellax.grocery_app_backend.dto.request.review.ReviewRequest;
 import com.capellax.grocery_app_backend.dto.response.review.ReviewResponse;
 import com.capellax.grocery_app_backend.response.ApiResponse;
-import com.capellax.grocery_app_backend.security.UserDetailsImpl;
+import com.capellax.grocery_app_backend.security.user.UserDetailsImpl;
 import com.capellax.grocery_app_backend.service.review.ReviewService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

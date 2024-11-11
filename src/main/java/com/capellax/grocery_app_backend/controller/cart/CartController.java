@@ -1,10 +1,10 @@
-package com.capellax.grocery_app_backend.controller;
+package com.capellax.grocery_app_backend.controller.cart;
 
 import com.capellax.grocery_app_backend.dto.request.cart.AddItemToCartRequest;
 import com.capellax.grocery_app_backend.dto.request.cart.UpdateCartItemRequest;
 import com.capellax.grocery_app_backend.dto.response.cart.CartResponse;
 import com.capellax.grocery_app_backend.response.ApiResponse;
-import com.capellax.grocery_app_backend.security.UserDetailsImpl;
+import com.capellax.grocery_app_backend.security.user.UserDetailsImpl;
 import com.capellax.grocery_app_backend.service.cart.CartService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

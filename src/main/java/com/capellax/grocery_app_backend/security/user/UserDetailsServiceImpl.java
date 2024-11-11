@@ -1,4 +1,4 @@
-package com.capellax.grocery_app_backend.security;
+package com.capellax.grocery_app_backend.security.user;
 
 import com.capellax.grocery_app_backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

@@ -1,4 +1,4 @@
-package com.capellax.grocery_app_backend.controller;
+package com.capellax.grocery_app_backend.controller.auth;
 
 import com.capellax.grocery_app_backend.dto.request.auth.*;
 import com.capellax.grocery_app_backend.dto.response.auth.ForgotPasswordResponse;

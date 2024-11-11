@@ -1,7 +1,7 @@
 package com.capellax.grocery_app_backend.dto.response.user;
 
-import com.capellax.grocery_app_backend.model.CartItem;
-import com.capellax.grocery_app_backend.model.Order;
+import com.capellax.grocery_app_backend.model.cart.CartItem;
+import com.capellax.grocery_app_backend.model.order.Order;
 import lombok.Data;
 
 import java.util.List;

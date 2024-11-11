@@ -1,6 +1,6 @@
-package com.capellax.grocery_app_backend.security;
+package com.capellax.grocery_app_backend.security.user;
 
-import com.capellax.grocery_app_backend.model.User;
+import com.capellax.grocery_app_backend.model.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;

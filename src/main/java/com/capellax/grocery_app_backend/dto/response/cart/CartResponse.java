@@ -1,6 +1,6 @@
 package com.capellax.grocery_app_backend.dto.response.cart;
 
-import com.capellax.grocery_app_backend.model.CartItem;
+import com.capellax.grocery_app_backend.model.cart.CartItem;
 import lombok.Data;
 
 import java.util.List;

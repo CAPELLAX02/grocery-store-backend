@@ -3,7 +3,7 @@ package com.capellax.grocery_app_backend.service.user;
 import com.capellax.grocery_app_backend.dto.response.user.GetUserProfileResponse;
 import com.capellax.grocery_app_backend.exception.custom.CustomRuntimeException;
 import com.capellax.grocery_app_backend.exception.enums.ErrorCode;
-import com.capellax.grocery_app_backend.model.User;
+import com.capellax.grocery_app_backend.model.user.User;
 import com.capellax.grocery_app_backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
