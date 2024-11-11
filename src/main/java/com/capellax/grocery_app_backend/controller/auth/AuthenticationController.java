@@ -47,7 +47,7 @@ public class AuthenticationController {
         return ResponseEntity.status(response.getStatus()).body(response);
     }
 
-    @PostMapping("/forgotPassword")
+    @PostMapping("/forgot-password")
     public ResponseEntity<ApiResponse<ForgotPasswordResponse>> forgotPassword(
             @Valid @RequestBody ForgotPasswordRequest request
     ) throws CustomMailException {
@@ -55,7 +55,7 @@ public class AuthenticationController {
         return ResponseEntity.status(response.getStatus()).body(response);
     }
 
-    @PostMapping("/resetPassword")
+    @PostMapping("/reset-password")
     public ResponseEntity<ApiResponse<ResetPasswordResponse>> resetPassword(
             @Valid @RequestBody ResetPasswordRequest request
     ) {

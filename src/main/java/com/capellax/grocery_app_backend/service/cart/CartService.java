@@ -68,13 +68,14 @@ public class CartService {
 
     public ApiResponse<CartResponse> updateCartItemQuantity(
             String username,
+            String productId,
             UpdateCartItemRequest request
     ) {
         User user = cartServiceUtils.getUserByUsername(username);
         List<CartItem> cart = user.getCart();
 
         CartItem item = cart.stream()
-                .filter(cartItem -> cartItem.getProductId().equals(request.getProductId()))
+                .filter(cartItem -> cartItem.getProductId().equals(productId))
                 .findFirst()
                 .orElseThrow(() -> new CustomRuntimeException(ErrorCode.CART_ITEM_NOT_FOUND));
 

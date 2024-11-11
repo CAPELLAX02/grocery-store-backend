@@ -17,7 +17,7 @@ public class OrderController {
 
     private final OrderService orderService;
 
-    @PostMapping("/placeOrder")
+    @PostMapping
     public ResponseEntity<ApiResponse<OrderResponse>> placeOrder(
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
@@ -25,7 +25,7 @@ public class OrderController {
         return ResponseEntity.status(response.getStatus()).body(response);
     }
 
-    @GetMapping("/all")
+    @GetMapping
     public ResponseEntity<ApiResponse<OrderListResponse>> getMyOrders(
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {

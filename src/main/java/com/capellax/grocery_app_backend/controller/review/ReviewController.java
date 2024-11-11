@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("${api.base-uri}")
+@RequestMapping("${api.base-uri}/products")
 @RequiredArgsConstructor
 public class ReviewController {
 
     private final ReviewService reviewService;
 
-    @GetMapping("/{productId}/reviews/all")
+    @GetMapping("/{productId}/reviews")
     public ResponseEntity<ApiResponse<List<ReviewResponse>>> getProductReviews(
             @PathVariable String productId
     ) {
@@ -28,7 +28,7 @@ public class ReviewController {
         return ResponseEntity.status(response.getStatus()).body(response);
     }
 
-    @PostMapping("/{productId}/reviews/add")
+    @PostMapping("/{productId}/reviews")
     public ResponseEntity<ApiResponse<ReviewResponse>> addProductReview(
             @PathVariable String productId,
             @Valid @RequestBody ReviewRequest reviewRequest,
@@ -39,7 +39,7 @@ public class ReviewController {
         return ResponseEntity.status(response.getStatus()).body(response);
     }
 
-    @DeleteMapping("/{productId}/reviews/delete")
+    @DeleteMapping("/{productId}/reviews")
     public ResponseEntity<ApiResponse<String>> deleteReview(
             @PathVariable String productId,
             @AuthenticationPrincipal UserDetailsImpl userDetails

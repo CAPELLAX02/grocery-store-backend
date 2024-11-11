@@ -28,7 +28,7 @@ public class CartController {
         return ResponseEntity.status(response.getStatus()).body(response);
     }
 
-    @PostMapping("/add")
+    @PostMapping
     public ResponseEntity<ApiResponse<CartResponse>> addItemToCart(
             @Valid @RequestBody AddItemToCartRequest request,
             @AuthenticationPrincipal UserDetailsImpl userDetails
@@ -38,17 +38,18 @@ public class CartController {
         return ResponseEntity.status(response.getStatus()).body(response);
     }
 
-    @PutMapping("/update")
+    @PutMapping("/{productId}")
     public ResponseEntity<ApiResponse<CartResponse>> updateCartItemQuantity(
+            @PathVariable String productId,
             @Valid @RequestBody UpdateCartItemRequest request,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
         String username = userDetails.getUsername();
-        ApiResponse<CartResponse> response = cartService.updateCartItemQuantity(username, request);
+        ApiResponse<CartResponse> response = cartService.updateCartItemQuantity(username, productId, request);
         return ResponseEntity.status(response.getStatus()).body(response);
     }
 
-    @DeleteMapping("/remove/{productId}")
+    @DeleteMapping("/{productId}")
     public ResponseEntity<ApiResponse<CartResponse>> removeItemFromCart(
             @PathVariable String productId,
             @AuthenticationPrincipal UserDetailsImpl userDetails
@@ -58,7 +59,7 @@ public class CartController {
         return ResponseEntity.status(response.getStatus()).body(response);
     }
 
-    @DeleteMapping("/clear")
+    @DeleteMapping
     public ResponseEntity<ApiResponse<CartResponse>> clearCart(
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
