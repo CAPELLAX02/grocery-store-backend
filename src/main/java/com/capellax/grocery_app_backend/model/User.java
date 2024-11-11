@@ -21,17 +21,11 @@ public class User {
     private String id;
 
     private String username;
-
     private String email;
-
     private String password;
-
     private String activationCode;
-
     private boolean enabled;
-
     private List<CartItem> cart = new ArrayList<>();
-
     private List<Order> orders = new ArrayList<>();
 
 }

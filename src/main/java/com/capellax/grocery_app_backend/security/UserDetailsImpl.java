@@ -19,9 +19,7 @@ public class UserDetailsImpl implements UserDetails {
     private String password;
     private boolean enabled;
 
-    public static UserDetailsImpl build(
-            User user
-    ) {
+    public static UserDetailsImpl build(User user) {
         return new UserDetailsImpl(
                 user.getId(),
                 user.getUsername(),

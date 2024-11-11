@@ -24,12 +24,10 @@ public class ApiResponse<T> {
             String message
     ) {
         ApiResponse<T> response = new ApiResponse<>();
-
         response.setStatus(HttpStatus.OK.value());
         response.setMessage(message);
         response.setData(data);
         response.setTimestamp(LocalDateTime.now());
-
         return response;
     }
 
@@ -39,12 +37,10 @@ public class ApiResponse<T> {
             List<ErrorDetails> errors
     ) {
         ApiResponse<T> response = new ApiResponse<>();
-
         response.setStatus(status.value());
         response.setMessage(message);
         response.setTimestamp(LocalDateTime.now());
         response.setErrors(errors);
-
         return response;
     }
 
