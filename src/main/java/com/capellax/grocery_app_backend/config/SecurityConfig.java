@@ -49,38 +49,35 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(
-            HttpSecurity httpSecurity
-    ) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         // Public endpoints
                         .requestMatchers(
-                                "/auth/**",
-                                "/products",
-                                "/products/{id}",
-                                "/reviews/{productId}/all"
+                                "/auth/**",                     // Authentication endpoints
+                                "/products",                    // List all products
+                                "/products/{id}",               // Get product by ID
+                                "/reviews/{productId}/all"      // Public access to reviews
                         )
                         .permitAll()
 
                         // Authenticated-only endpoints
                         .requestMatchers(
-                                "/cart/**",
-                                "/orders/**",
-                                "/user/logout",
-                                "/user/updateProfile",
-                                "/reviews/{productId}/add",
-                                "/reviews/{productId}/delete"
+                                "/cart/**",                     // Cart operations
+                                "/orders/**",                   // Order operations
+//                                "/user/logout",                 // Logout
+                                "/user/updateProfile",          // Update profile
+                                "/reviews/{productId}/add",     // Add review to product
+                                "/reviews/{productId}/delete"   // Delete own review
                         )
                         .authenticated()
 
-                        // Admin-only endpoints (optional - uncomment if needed later on)
+                        // Admin-only endpoints (example; uncomment and modify as needed)
                         //.requestMatchers("/admin/**").hasRole("ADMIN")
 
                         // All other requests require authentication
-                        .anyRequest()
-                        .authenticated()
+                        .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
