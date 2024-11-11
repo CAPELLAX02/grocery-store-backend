@@ -59,7 +59,8 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/auth/**",
                                 "/products",
-                                "/products/{id}"
+                                "/products/{id}",
+                                "/reviews/{productId}/all"
                         )
                         .permitAll()
 
@@ -68,7 +69,9 @@ public class SecurityConfig {
                                 "/cart/**",
                                 "/orders/**",
                                 "/user/logout",
-                                "/user/updateProfile"
+                                "/user/updateProfile",
+                                "/reviews/{productId}/add",
+                                "/reviews/{productId}/delete"
                         )
                         .authenticated()
 

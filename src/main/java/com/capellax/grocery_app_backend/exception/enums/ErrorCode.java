@@ -42,6 +42,11 @@ public enum ErrorCode {
     USERNAME_TAKEN("Username is already taken", HttpStatus.CONFLICT),
     INVALID_PASSWORD("Invalid password", HttpStatus.BAD_REQUEST),
 
+    // REVIEW ERRORS
+    REVIEW_NOT_FOUND("Review not found", HttpStatus.NOT_FOUND),
+    REVIEWS_NOT_FOUND("Reviews not found", HttpStatus.NOT_FOUND),
+    ALREADY_REVIEWED("Product already reviewed", HttpStatus.CONFLICT),
+
     // OTHER GENERAL ERRORS
     INTERNAL_SERVER_ERROR("An internal server error occurred", HttpStatus.INTERNAL_SERVER_ERROR),
     BAD_REQUEST("Bad request", HttpStatus.BAD_REQUEST),
