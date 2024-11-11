@@ -1,12 +1,12 @@
 package com.capellax.grocery_app_backend.service.jwt;
 
+import com.capellax.grocery_app_backend.config.EnvironmentConfig;
 import com.capellax.grocery_app_backend.exception.custom.CustomRuntimeException;
 import com.capellax.grocery_app_backend.exception.enums.ErrorCode;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -20,9 +20,7 @@ import java.util.function.Function;
 public class JwtService {
 
     private final JwtServiceUtils jwtServiceUtils;
-
-    @Value("${security.jwt.expiration}")
-    private Long jwtExpiration;
+    private final EnvironmentConfig environmentConfig;
 
     public <T> T extractClaimsFromToken(String token, Function<Claims, T> claimsResolver) {
         try {
@@ -56,8 +54,9 @@ public class JwtService {
                 .setClaims(claims)
                 .setSubject(username)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + jwtExpiration))
+                .setExpiration(new Date(System.currentTimeMillis() + environmentConfig.getJwtExpiration()))
                 .signWith(jwtServiceUtils.getSigningKey(), SignatureAlgorithm.HS256)
+                // TODO: Change the signature algorithm
                 .compact();
     }
 

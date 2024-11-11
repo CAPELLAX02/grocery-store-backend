@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/products")
+@RequestMapping("${api.base-uri}/products")
 @RequiredArgsConstructor
 public class ProductController {
 

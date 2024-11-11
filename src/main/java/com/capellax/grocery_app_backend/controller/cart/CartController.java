@@ -13,7 +13,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/cart")
+@RequestMapping("${api.base-uri}/cart")
 @RequiredArgsConstructor
 public class CartController {
 

@@ -59,6 +59,7 @@ public class SecurityConfig {
                                 "/products",                    // List all products
                                 "/products/{id}",               // Get product by ID
                                 "/reviews/{productId}/all"      // Public access to reviews
+                                // TODO: Check whether we can also state the HTTP method here
                         )
                         .permitAll()
 
