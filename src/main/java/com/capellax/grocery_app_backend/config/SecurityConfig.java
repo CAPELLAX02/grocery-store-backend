@@ -56,63 +56,41 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
 
-                        // --------------------------- PUBLIC ENDPOINTS ----------------------------
+                        // ------------------------------ PUBLIC ENDPOINTS -------------------------------
 
-                        // Register user with "enabled: false" & Send activation code to their email
-                        .requestMatchers(POST, "/api/v1/auth/register").permitAll()
-                        // Activate user account using the activation code
-                        .requestMatchers(POST, "/api/v1/auth/activate").permitAll()
-                        // Log the user in & Get the authentication token
-                        .requestMatchers(POST, "/api/v1/auth/login").permitAll()
-                        // Send user reset-password code via email
-                        .requestMatchers(POST, "/api/v1/auth/forgot-password").permitAll()
-                        // Reset user's password using the reset-password code
-                        .requestMatchers(POST, "/api/v1/auth/reset-password").permitAll()
+                        .requestMatchers(POST,   "/api/v1/auth/register").permitAll()
+                        .requestMatchers(POST,   "/api/v1/auth/activate").permitAll()
+                        .requestMatchers(POST,   "/api/v1/auth/login").permitAll()
+                        .requestMatchers(POST,   "/api/v1/auth/forgot-password").permitAll()
+                        .requestMatchers(POST,   "/api/v1/auth/reset-password").permitAll()
 
-                        // Fetch all products
-                        .requestMatchers(GET, "/api/v1/products").permitAll()
-                        // Fetch product by ID
-                        .requestMatchers(GET, "/api/v1/products/{id}").permitAll()
-                        // Fetch product reviews
-                        .requestMatchers(GET, "/api/v1/products/{productId}/reviews").permitAll()
+                        .requestMatchers(GET,    "/api/v1/products").permitAll()
+                        .requestMatchers(GET,    "/api/v1/products/{id}").permitAll()
+                        .requestMatchers(GET,    "/api/v1/products/{productId}/reviews").permitAll()
 
-                        // --------------------- AUTHENTICATED-ONLY ENDPOINTS ----------------------
+                        // ------------------------ AUTHENTICATED-ONLY ENDPOINTS -------------------------
 
-                        // Fetch my shopping cart
-                        .requestMatchers(GET, "/api/v1/cart").authenticated()
-                        // Add item to my cart
-                        .requestMatchers(POST, "/api/v1/cart").authenticated()
-                        // Update cart item quantity
-                        .requestMatchers(PUT, "/api/v1/cart/{productId}").authenticated()
-                        // Delete a cart item
+                        .requestMatchers(GET,    "/api/v1/cart").authenticated()
+                        .requestMatchers(POST,   "/api/v1/cart").authenticated()
+                        .requestMatchers(PATCH,  "/api/v1/cart/{productId}").authenticated()
                         .requestMatchers(DELETE, "/api/v1/cart/{productId}").authenticated()
-                        // Clear all my cart items
                         .requestMatchers(DELETE, "/api/v1/cart").authenticated()
 
-                        // Place order
-                        .requestMatchers(POST, "/api/v1/orders").authenticated()
-                        // Fetch my orders
-                        .requestMatchers(GET, "/api/v1/orders").authenticated()
-                        // Fetch my order by ID
-                        .requestMatchers(GET, "/api/v1/orders/{orderId}").authenticated()
+                        .requestMatchers(POST,  "/api/v1/orders").authenticated()
+                        .requestMatchers(GET,   "/api/v1/orders").authenticated()
+                        .requestMatchers(GET,   "/api/v1/orders/{orderId}").authenticated()
 
-                        // Add product review
-                        .requestMatchers(POST, "/api/v1/products/{productId}/reviews").authenticated()
-                        // Delete my product view
-                        .requestMatchers(DELETE, "/api/v1/products/{productId}/reviews").authenticated()
+                        .requestMatchers(POST,  "/api/v1/products/{productId}/reviews").authenticated()
+                        .requestMatchers(DELETE,"/api/v1/products/{productId}/reviews").authenticated()
 
-                        // Fetch my profile
-                        .requestMatchers(GET, "/api/v1/users/profile").authenticated()
-                        // Update my profile
-                        .requestMatchers(PUT, "/api/v1/users/profile").authenticated()
+                        .requestMatchers(GET,   "/api/v1/users/profile").authenticated()
+                        .requestMatchers(PATCH, "/api/v1/users/profile").authenticated()
 
+                        // ------------------ ALL OTHER REQUESTS REQUIRE AUTHENTICATION ------------------
 
-                        // --------------- ALL OTHER REQUESTS REQUIRE AUTHENTICATION ---------------
                         .anyRequest().authenticated()
                 )
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                )
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

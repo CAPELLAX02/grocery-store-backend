@@ -38,7 +38,7 @@ public class CartController {
         return ResponseEntity.status(response.getStatus()).body(response);
     }
 
-    @PutMapping("/{productId}")
+    @PatchMapping("/{productId}")
     public ResponseEntity<ApiResponse<CartResponse>> updateCartItemQuantity(
             @PathVariable String productId,
             @Valid @RequestBody UpdateCartItemRequest request,

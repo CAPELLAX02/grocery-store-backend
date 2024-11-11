@@ -28,7 +28,7 @@ public class UserController {
         return ResponseEntity.status(response.getStatus()).body(response);
     }
 
-    @PutMapping("/profile")
+    @PatchMapping("/profile")
     public ResponseEntity<ApiResponse<UpdateUserProfileResponse>> updateUserProfile(
             @Valid @RequestBody UpdateUserProfileRequest request,
             @AuthenticationPrincipal UserDetailsImpl userDetails
