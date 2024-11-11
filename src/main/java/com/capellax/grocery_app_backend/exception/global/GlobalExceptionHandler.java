@@ -35,9 +35,9 @@ public class GlobalExceptionHandler {
                         err.getRejectedValue()
                 ))
                 .toList();
-        String message = utils.getSafeMessage(e, "Validation failed");
+        String message = "Validation failed";
         HttpStatus status = utils.getHttpStatus(e, BAD_REQUEST);
-        ApiResponse<Object> response = ApiResponse.error(message, status, errors);
+        ApiResponse<Object> response = ApiResponse.error("Validation failed", status, errors);
         return new ResponseEntity<>(response, status);
     }
 
