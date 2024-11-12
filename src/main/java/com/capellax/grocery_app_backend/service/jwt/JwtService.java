@@ -55,8 +55,7 @@ public class JwtService {
                 .setSubject(username)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + environmentConfig.getJwtExpiration()))
-                .signWith(jwtServiceUtils.getSigningKey(), SignatureAlgorithm.HS256)
-                // TODO: Change the signature algorithm
+                .signWith(jwtServiceUtils.getSigningKey(), SignatureAlgorithm.HS512)
                 .compact();
     }
 

@@ -19,7 +19,7 @@ public class JwtServiceUtils {
     private final EnvironmentConfig environmentConfig;
 
     protected Key getSigningKey() {
-        byte[] keyBytes = Decoders.BASE64URL.decode(environmentConfig.getJwtSecret());
+        byte[] keyBytes = Decoders.BASE64.decode(environmentConfig.getJwtSecret());
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
