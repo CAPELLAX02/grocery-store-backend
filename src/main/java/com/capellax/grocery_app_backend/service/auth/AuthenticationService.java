@@ -21,6 +21,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -34,15 +35,32 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationServiceUtils authenticationServiceUtils;
 
-    public ApiResponse<RegisterResponse> registerUser(
-            RegisterRequest request
-    ) {
+    public ApiResponse<RegisterResponse> registerUser(RegisterRequest request) {
         Optional<User> existingUser = userRepository.findByEmail(request.getEmail());
 
+        // Logic for already existing user
         if (existingUser.isPresent()) {
-            throw new CustomRuntimeException(ErrorCode.USER_ALREADY_EXISTS);
+            User user = existingUser.get();
+            if (Boolean.TRUE.equals(user.isEnabled())) {
+                throw new CustomRuntimeException(ErrorCode.USER_ALREADY_EXISTS);
+            }
+
+            if (user.getActivationCodeExpiryDate() != null &&
+                    user.getActivationCodeExpiryDate().isAfter(LocalDateTime.now())) {
+                return ApiResponse.success(null, "Activation code already sent. Please check your email (" + user.getEmail() + ") box or spam.");
+            }
+
+            String newActivationCode = authenticationServiceUtils.generateActivationCode();
+            user.setActivationCode(newActivationCode);
+            user.setActivationCodeExpiryDate(authenticationServiceUtils.activationCodeExpiryDate);
+
+            userRepository.save(user);
+            mailService.sendActivationCode(user.getEmail(), user.getUsername(), newActivationCode);
+
+            return ApiResponse.success(null, "New activation code sent to (" + user.getEmail() + ")");
         }
 
+        // Registration for brand-new user
         User user = new User();
         user.setUsername(request.getUsername());
         user.setEmail(request.getEmail());
@@ -50,15 +68,11 @@ public class AuthenticationService {
 
         String activationCode = authenticationServiceUtils.generateActivationCode();
         user.setActivationCode(activationCode);
+        user.setActivationCodeExpiryDate(authenticationServiceUtils.activationCodeExpiryDate);
         user.setEnabled(false);
 
         userRepository.save(user);
-
-        mailService.sendActivationCode(
-                user.getEmail(),
-                user.getUsername(),
-                activationCode
-        );
+        mailService.sendActivationCode(user.getEmail(), user.getUsername(), activationCode);
 
         RegisterResponse response = new RegisterResponse();
         response.setUserId(user.getId());
@@ -67,6 +81,7 @@ public class AuthenticationService {
 
         return ApiResponse.success(response, "User registered successfully. Activation code sent via email.");
     }
+
 
     public ApiResponse<String> activateUser(
             ActivateAccountRequest request
