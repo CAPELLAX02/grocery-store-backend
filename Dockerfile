@@ -1,24 +1,21 @@
-# Use OpenJDK 17 as the base image
-FROM openjdk:17-jdk-slim
+FROM maven:3.8-openjdk-17 AS build
 
-# Set the working directory
 WORKDIR /app
 
-# Copy the pom.xml and download dependencies
 COPY pom.xml .
-RUN apt-get update && \
-    apt-get install -y maven && \
-    mvn dependency:resolve
 
-# Copy the project source files
+RUN mvn dependency:go-offline
+
 COPY src ./src
 
-# Build and package the project
 RUN mvn clean package -DskipTests
 
-# Run the packaged .jar file
-# (targeting the jar file created during packaging using `target/*.jar`)
-CMD ["java", "-jar", "target/grocery-app-backend-0.0.1-SNAPSHOT.jar"]
+FROM openjdk:17-jdk-slim
 
-# Expose the application port
-EXPOSE 8000
+WORKDIR /app
+
+COPY --from=build /app/target/grocery-app-backend-0.0.1-SNAPSHOT.jar app.jar
+
+CMD ["java", "-jar", "/app/app.jar"]
+
+EXPOSE 8080

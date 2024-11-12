@@ -1,6 +1,5 @@
 package com.capellax.grocery_app_backend.service.jwt;
 
-import com.capellax.grocery_app_backend.config.EnvironmentConfig;
 import com.capellax.grocery_app_backend.exception.custom.CustomRuntimeException;
 import com.capellax.grocery_app_backend.exception.enums.ErrorCode;
 import io.jsonwebtoken.Claims;
@@ -16,10 +15,13 @@ import java.security.Key;
 @RequiredArgsConstructor
 public class JwtServiceUtils {
 
-    private final EnvironmentConfig environmentConfig;
+//    @Value("${security.jwt.secret}")
+    private final String jwtSecret = "KDskFIEOEDUnoobSrqCfCGTcSvsTCGDujUXNDVS+IKvkbBBDLYgDaEYs5avdNF6AIUtbW1OorIYXMWeJrrNrMm4X68ELdQBwlWRq8RTwnKud0AQaVCjTQBfjmGmX2rkKaXz7SMAuUuGwgsX32tfQvWKmO/cwSwjjtyj3EqE/2BN8";
+
+//    private final JwtConfig jwtConfig;
 
     protected Key getSigningKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(environmentConfig.getJwtSecret());
+        byte[] keyBytes = Decoders.BASE64.decode(jwtSecret);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 

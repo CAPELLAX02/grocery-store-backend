@@ -1,6 +1,5 @@
 package com.capellax.grocery_app_backend.service.jwt;
 
-import com.capellax.grocery_app_backend.config.EnvironmentConfig;
 import com.capellax.grocery_app_backend.exception.custom.CustomRuntimeException;
 import com.capellax.grocery_app_backend.exception.enums.ErrorCode;
 import io.jsonwebtoken.Claims;
@@ -20,7 +19,10 @@ import java.util.function.Function;
 public class JwtService {
 
     private final JwtServiceUtils jwtServiceUtils;
-    private final EnvironmentConfig environmentConfig;
+//    private final JwtConfig jwtConfig;
+
+//    @Value("${security.jwt.expiration}")
+    private final Long jwtExpiration = 86400000L;
 
     public <T> T extractClaimsFromToken(String token, Function<Claims, T> claimsResolver) {
         try {
@@ -54,7 +56,7 @@ public class JwtService {
                 .setClaims(claims)
                 .setSubject(username)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + environmentConfig.getJwtExpiration()))
+                .setExpiration(new Date(System.currentTimeMillis() + jwtExpiration))
                 .signWith(jwtServiceUtils.getSigningKey(), SignatureAlgorithm.HS512)
                 .compact();
     }
