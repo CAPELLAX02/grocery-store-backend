@@ -8,6 +8,8 @@ import com.capellax.grocery_app_backend.dto.response.auth.ResetPasswordResponse;
 import com.capellax.grocery_app_backend.exception.custom.CustomMailException;
 import com.capellax.grocery_app_backend.response.ApiResponse;
 import com.capellax.grocery_app_backend.service.auth.AuthenticationService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,11 +21,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("${api.base-uri}/auth")
 @RequiredArgsConstructor
+@Tag(name = "Authentication", description = "Endpoints related to authentication")
 public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
 
     @PostMapping("/register")
+    @Operation(summary = "Register user", description = "Register user & Send activation code via email to activate their account")
     public ResponseEntity<ApiResponse<RegisterResponse>> registerUser(
             @Valid @RequestBody RegisterRequest request
     ) throws CustomMailException {
