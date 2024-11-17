@@ -133,7 +133,8 @@ public class AuthenticationService {
                 .orElseThrow(() -> new CustomRuntimeException(ErrorCode.USER_NOT_FOUND));
 
         String resetPasswordCode = authenticationServiceUtils.generateResetPasswordCode();
-        user.setActivationCode(resetPasswordCode); // maybe .setResetPasswordCode later on
+        user.setResetPasswordCode(resetPasswordCode);
+        user.setResetPasswordCodeExpiryDate(authenticationServiceUtils.resetPasswordCodeExpiryDate);
 
         userRepository.save(user);
 
@@ -152,18 +153,16 @@ public class AuthenticationService {
     public ApiResponse<ResetPasswordResponse> resetPassword(
             ResetPasswordRequest request
     ) {
-        User user = userRepository.findByActivationCode(request.getResetPasswordCode())
+        User user = userRepository.findByResetPasswordCode(request.getResetPasswordCode())
                 .orElseThrow(() -> new CustomRuntimeException(ErrorCode.INVALID_RESET_PASSWORD_CODE));
 
         user.setPassword(passwordEncoder.encode(request.getNewPassword()));
-        user.setActivationCode(null);
+        user.setResetPasswordCode(null);
+        user.setResetPasswordCodeExpiryDate(null);
 
         userRepository.save(user);
 
-        ResetPasswordResponse response = new ResetPasswordResponse();
-        response.setMessage("Password reset successfully.");
-
-        return ApiResponse.success(response, "Password reset successfully.");
+        return ApiResponse.success(null, "Password reset successfully.");
     }
 
 }

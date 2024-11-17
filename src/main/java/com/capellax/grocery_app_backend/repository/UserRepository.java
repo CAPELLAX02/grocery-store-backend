@@ -13,5 +13,6 @@ public interface UserRepository
     Optional<User> findByUsername(String username);
     Optional<User> findByEmail(String email);
     Optional<User> findByActivationCode(String resetPasswordCode);
+    Optional<User> findByResetPasswordCode(String resetPasswordCode);
 
 }

@@ -30,7 +30,9 @@ public class User {
     private String email;
     private String password;
     private String activationCode;
+    private String resetPasswordCode;
     private LocalDateTime activationCodeExpiryDate;
+    private LocalDateTime resetPasswordCodeExpiryDate;
     private boolean enabled;
     private List<CartItem> cart = new ArrayList<>();
     private List<Order> orders = new ArrayList<>();
