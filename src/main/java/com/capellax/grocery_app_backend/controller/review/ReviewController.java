@@ -41,7 +41,7 @@ public class ReviewController {
     }
 
     @DeleteMapping("/{productId}/reviews")
-    public ResponseEntity<ApiResponse<String>> deleteReview(
+    public ResponseEntity<ApiResponse<String>> deleteMyReview(
             @PathVariable String productId,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {

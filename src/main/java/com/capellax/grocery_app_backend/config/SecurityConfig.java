@@ -59,19 +59,19 @@ public class SecurityConfig {
                         // ------------------------------ PUBLIC ENDPOINTS -------------------------------
 
                         .requestMatchers(POST,   "/api/v1/auth/register").permitAll()
-                        .requestMatchers(POST,   "/api/v1/auth/activate").permitAll()
+                        .requestMatchers(PATCH,  "/api/v1/auth/activate").permitAll()
                         .requestMatchers(POST,   "/api/v1/auth/login").permitAll()
                         .requestMatchers(POST,   "/api/v1/auth/forgot-password").permitAll()
-                        .requestMatchers(POST,   "/api/v1/auth/reset-password").permitAll()
+                        .requestMatchers(PATCH,  "/api/v1/auth/reset-password").permitAll()
 
                         .requestMatchers(GET,    "/api/v1/products").permitAll()
                         .requestMatchers(GET,    "/api/v1/products/{id}").permitAll()
                         .requestMatchers(GET,    "/api/v1/products/{productId}/reviews").permitAll()
 
-                        .requestMatchers("/v3/api-docs/**").permitAll()
-                        .requestMatchers("/swagger-ui/**").permitAll()
-                        .requestMatchers("/swagger-ui.html").permitAll()
-                        .requestMatchers("/swagger-ui/index.html").permitAll()
+                        .requestMatchers(GET,    "/v3/api-docs/**").permitAll()
+                        .requestMatchers(GET,    "/swagger-ui/**").permitAll()
+                        .requestMatchers(GET,    "/swagger-ui.html").permitAll()
+                        .requestMatchers(GET,    "/swagger-ui/index.html").permitAll()
 
                         // ------------------------ AUTHENTICATED-ONLY ENDPOINTS -------------------------
 

@@ -21,7 +21,7 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/profile")
-    public ResponseEntity<ApiResponse<GetUserProfileResponse>> getUserProfile(
+    public ResponseEntity<ApiResponse<GetUserProfileResponse>> getMyProfile(
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
         String username = userDetails.getUsername();
@@ -30,7 +30,7 @@ public class UserController {
     }
 
     @PatchMapping("/profile")
-    public ResponseEntity<ApiResponse<UpdateUserProfileResponse>> updateUserProfile(
+    public ResponseEntity<ApiResponse<UpdateUserProfileResponse>> updateMyProfile(
             @Valid @RequestBody UpdateUserProfileRequest request,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
