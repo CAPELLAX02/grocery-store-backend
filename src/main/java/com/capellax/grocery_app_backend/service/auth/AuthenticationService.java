@@ -35,7 +35,9 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationServiceUtils authenticationServiceUtils;
 
-    public ApiResponse<RegisterResponse> registerUser(RegisterRequest request) {
+    public ApiResponse<RegisterResponse> registerUser(
+            RegisterRequest request
+    ) {
         Optional<User> existingUser = userRepository.findByEmail(request.getEmail());
 
         // Logic for already existing user
@@ -82,7 +84,6 @@ public class AuthenticationService {
         return ApiResponse.success(response, "User registered successfully. Activation code sent via email.");
     }
 
-
     public ApiResponse<String> activateUser(
             ActivateAccountRequest request
     ) {
@@ -95,6 +96,7 @@ public class AuthenticationService {
 
         user.setEnabled(true);
         user.setActivationCode(null);
+        user.setActivationCodeExpiryDate(null);
         userRepository.save(user);
 
         return ApiResponse.success(null, "Account activated successfully");
