@@ -10,7 +10,6 @@ import com.capellax.grocery_app_backend.model.product.Product;
 import com.capellax.grocery_app_backend.model.user.User;
 import com.capellax.grocery_app_backend.repository.UserRepository;
 import com.capellax.grocery_app_backend.response.ApiResponse;
-import com.capellax.grocery_app_backend.service.product.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +21,6 @@ import java.util.Optional;
 public class CartService {
 
     private final UserRepository userRepository;
-    private final ProductService productService;
     private final CartServiceUtils cartServiceUtils;
 
     public ApiResponse<CartResponse> getCart(
@@ -38,8 +36,7 @@ public class CartService {
             AddItemToCartRequest request
     ) {
         User user = cartServiceUtils.getUserByUsername(username);
-        Product product = Optional.ofNullable(productService.getProductById(request.getProductId()))
-                .orElseThrow(() -> new CustomRuntimeException(ErrorCode.PRODUCT_NOT_FOUND));
+        Product product = cartServiceUtils.getProductByIdModel(request.getProductId());
 
         List<CartItem> cart = user.getCart();
         Optional<CartItem> existingItem = cart.stream()

@@ -1,6 +1,7 @@
 package com.capellax.grocery_app_backend.service.review;
 
 import com.capellax.grocery_app_backend.dto.request.review.ReviewRequest;
+import com.capellax.grocery_app_backend.dto.response.product.ProductResponse;
 import com.capellax.grocery_app_backend.dto.response.review.ReviewResponse;
 import com.capellax.grocery_app_backend.exception.custom.CustomRuntimeException;
 import com.capellax.grocery_app_backend.exception.enums.ErrorCode;
@@ -26,7 +27,7 @@ public class ReviewService {
     public ApiResponse<List<ReviewResponse>> getProductReviews(
             String productId
     ) {
-        Product product = productService.getProductById(productId);
+        ProductResponse product = productService.getProductById(productId).getData();
 
         List<ReviewResponse> reviews = product.getReviews().stream()
                 .map(reviewServiceUtils::buildReviewResponse)
@@ -39,9 +40,9 @@ public class ReviewService {
             String productId,
             ReviewRequest request
     ) {
-        Product product = productService.getProductById(productId);
+        ProductResponse productResponse = productService.getProductById(productId).getData();
 
-        boolean alreadyReviewed = product.getReviews().stream()
+        boolean alreadyReviewed = productResponse.getReviews().stream()
                 .anyMatch(review -> review.getUsername().equals(request.getUsername()));
 
         if (alreadyReviewed) {
@@ -54,6 +55,8 @@ public class ReviewService {
         review.setComment(request.getComment());
         review.setDate(LocalDate.now());
 
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new CustomRuntimeException(ErrorCode.PRODUCT_NOT_FOUND));
         product.getReviews().add(review);
         productRepository.save(product);
 
@@ -65,7 +68,8 @@ public class ReviewService {
             String productId,
             String username
     ) {
-        Product product = productService.getProductById(productId);
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new CustomRuntimeException(ErrorCode.PRODUCT_NOT_FOUND));
 
         boolean removed = product.getReviews().removeIf(review -> review.getUsername().equals(username));
         if (!removed) {

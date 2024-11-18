@@ -1,31 +1,48 @@
 package com.capellax.grocery_app_backend.service.product;
 
+import com.capellax.grocery_app_backend.dto.response.product.ProductListResponse;
+import com.capellax.grocery_app_backend.dto.response.product.ProductResponse;
 import com.capellax.grocery_app_backend.exception.custom.CustomRuntimeException;
 import com.capellax.grocery_app_backend.exception.enums.ErrorCode;
 import com.capellax.grocery_app_backend.model.product.Product;
 import com.capellax.grocery_app_backend.repository.ProductRepository;
+import com.capellax.grocery_app_backend.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final ProductServiceUtils productServiceUtils;
 
-    public List<Product> getAllProducts() {
-        return Optional.of(productRepository.findAll())
-                .orElseThrow(() -> new CustomRuntimeException(ErrorCode.PRODUCT_NOT_FOUND));
+    public ApiResponse<ProductListResponse> getAllProducts() {
+        List<Product> products = productRepository.findAll();
+
+        if (products.isEmpty()) {
+            throw new CustomRuntimeException(ErrorCode.PRODUCT_NOT_FOUND);
+        }
+
+        List<ProductResponse> productResponses = products.stream()
+                .map(productServiceUtils::buildProductResponse)
+                .toList();
+
+        ProductListResponse response = new ProductListResponse(productResponses, productResponses.size());
+        return ApiResponse.success(response, "Products retrieved successfully");
     }
 
-    public Product getProductById(
-            String id
+    public ApiResponse<ProductResponse> getProductById(
+            String productId
     ) {
-        return productRepository.findById(id)
-                .orElseThrow(() -> new CustomRuntimeException(ErrorCode.PRODUCTS_NOT_FOUND));
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new CustomRuntimeException(ErrorCode.PRODUCT_NOT_FOUND));
+
+        ProductResponse response = productServiceUtils.buildProductResponse(product);
+
+        return ApiResponse.success(response, "Product retrieved successfully");
     }
 
 }

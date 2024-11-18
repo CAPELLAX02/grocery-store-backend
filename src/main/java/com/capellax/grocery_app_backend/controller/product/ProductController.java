@@ -1,13 +1,15 @@
 package com.capellax.grocery_app_backend.controller.product;
 
-import com.capellax.grocery_app_backend.model.product.Product;
+import com.capellax.grocery_app_backend.dto.response.product.ProductListResponse;
+import com.capellax.grocery_app_backend.dto.response.product.ProductResponse;
+import com.capellax.grocery_app_backend.response.ApiResponse;
 import com.capellax.grocery_app_backend.service.product.ProductService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 //@RequestMapping("${api.base-uri}/products")
@@ -18,19 +20,17 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping
-    public ResponseEntity<List<Product>> getAllProducts() {
-        List<Product> products = productService.getAllProducts();
-        return new ResponseEntity<>(products, HttpStatus.OK);
+    public ResponseEntity<ApiResponse<ProductListResponse>> getAllProducts() {
+        ApiResponse<ProductListResponse> response = productService.getAllProducts();
+        return ResponseEntity.status(response.getStatus()).body(response);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Product> getProductById(
-            @PathVariable String id
+    @GetMapping("/{productId}")
+    public ResponseEntity<ApiResponse<ProductResponse>> getProductById(
+            @PathVariable String productId
     ) {
-        Product product = productService.getProductById(id);
-        return product != null
-                ? new ResponseEntity<>(product, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        ApiResponse<ProductResponse> response = productService.getProductById(productId);
+        return ResponseEntity.status(response.getStatus()).body(response);
     }
 
 }

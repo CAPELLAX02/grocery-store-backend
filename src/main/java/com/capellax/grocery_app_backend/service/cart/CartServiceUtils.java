@@ -1,8 +1,12 @@
 package com.capellax.grocery_app_backend.service.cart;
 
 import com.capellax.grocery_app_backend.dto.response.cart.CartResponse;
+import com.capellax.grocery_app_backend.exception.custom.CustomRuntimeException;
+import com.capellax.grocery_app_backend.exception.enums.ErrorCode;
 import com.capellax.grocery_app_backend.model.cart.CartItem;
+import com.capellax.grocery_app_backend.model.product.Product;
 import com.capellax.grocery_app_backend.model.user.User;
+import com.capellax.grocery_app_backend.repository.ProductRepository;
 import com.capellax.grocery_app_backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -17,6 +21,12 @@ import java.util.List;
 public class CartServiceUtils {
 
     private final UserRepository userRepository;
+    private final ProductRepository productRepository;
+
+    protected Product getProductByIdModel(String productId) {
+        return productRepository.findById(productId)
+                .orElseThrow(() -> new CustomRuntimeException(ErrorCode.PRODUCT_NOT_FOUND));
+    }
 
     protected User getUserByUsername(String username) {
         return userRepository.findByUsername(username)
