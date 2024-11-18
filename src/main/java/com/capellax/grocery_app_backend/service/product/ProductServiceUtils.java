@@ -11,6 +11,7 @@ public class ProductServiceUtils {
 
     protected ProductResponse buildProductResponse(Product product) {
         ProductResponse response = new ProductResponse();
+        response.setId(product.getId());
         response.setName(product.getName());
         response.setDescription(product.getDescription());
         response.setPrice(product.getPrice());
