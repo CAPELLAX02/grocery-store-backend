@@ -6,10 +6,7 @@ import com.capellax.grocery_app_backend.response.ApiResponse;
 import com.capellax.grocery_app_backend.service.product.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 //@RequestMapping("${api.base-uri}/products")
@@ -20,8 +17,11 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping
-    public ResponseEntity<ApiResponse<ProductListResponse>> getAllProducts() {
-        ApiResponse<ProductListResponse> response = productService.getAllProducts();
+    public ResponseEntity<ApiResponse<ProductListResponse>> getAllProducts(
+            @RequestParam(value = "offset", defaultValue = "0") int offset,
+            @RequestParam(value = "limit", defaultValue = "10") int limit
+    ) {
+        ApiResponse<ProductListResponse> response = productService.getAllProducts(offset, limit);
         return ResponseEntity.status(response.getStatus()).body(response);
     }
 
