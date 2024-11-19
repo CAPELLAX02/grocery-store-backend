@@ -10,6 +10,10 @@ import com.capellax.grocery_app_backend.model.product.Product;
 import com.capellax.grocery_app_backend.model.user.User;
 import com.capellax.grocery_app_backend.repository.UserRepository;
 import com.capellax.grocery_app_backend.response.ApiResponse;
+import com.capellax.grocery_app_backend.service.cart.helper.CartHelper;
+import com.capellax.grocery_app_backend.service.cart.helper.ProductHelper;
+import com.capellax.grocery_app_backend.service.cart.helper.UserHelper;
+import com.capellax.grocery_app_backend.service.cart.utils.CartUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,47 +24,27 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class CartService {
 
-    private final UserRepository userRepository;
-    private final CartServiceUtils cartServiceUtils;
+    private final CartHelper cartHelper;
+    private final ProductHelper productHelper;
+    private final UserHelper userHelper;
 
     public ApiResponse<CartResponse> getCart(
             String username
     ) {
-        User user = cartServiceUtils.getUserByUsername(username);
-        CartResponse cartResponse = cartServiceUtils.buildCartResponse(user.getCart());
-        return ApiResponse.success(cartResponse, "Cart fetched successfully");
+        User user = userHelper.getUserByUsername(username);
+        CartResponse response = cartHelper.buildCartResponse(user.getCart());
+        return ApiResponse.success(response, "Cart retrieved successfully");
     }
 
     public ApiResponse<CartResponse> addItemToCart(
             String username,
             AddItemToCartRequest request
     ) {
-        User user = cartServiceUtils.getUserByUsername(username);
-        Product product = cartServiceUtils.getProductByIdModel(request.getProductId());
-
-        List<CartItem> cart = user.getCart();
-        Optional<CartItem> existingItem = cart.stream()
-                .filter(item -> item.getProductId().equals(request.getProductId()))
-                .findFirst();
-
-        if (existingItem.isPresent()) {
-            CartItem item = existingItem.get();
-            item.setQuantity(item.getQuantity() + request.getQuantity());
-
-        } else {
-            CartItem newItem = new CartItem();
-            newItem.setProductId(request.getProductId());
-            newItem.setProductName(product.getName());
-            newItem.setQuantity(request.getQuantity());
-            newItem.setPrice(product.getPrice());
-            cart.add(newItem);
-        }
-
-        userRepository.save(user);
-
-        CartResponse updatedCartResponse = cartServiceUtils.buildCartResponse(user.getCart());
-
-        return ApiResponse.success(updatedCartResponse, "Item added to cart successfully");
+        User user = userHelper.getUserByUsername(username);
+        Product product = productHelper.getProductById(request.getProductId());
+        cartHelper.addItemToCart(user, product, request.getQuantity());
+        CartResponse response = cartHelper.buildCartResponse(user.getCart());
+        return ApiResponse.success(response, "Item added to cart successfully");
     }
 
     public ApiResponse<CartResponse> updateCartItemQuantity(
@@ -68,46 +52,29 @@ public class CartService {
             String productId,
             UpdateCartItemRequest request
     ) {
-        User user = cartServiceUtils.getUserByUsername(username);
-        List<CartItem> cart = user.getCart();
-
-        CartItem item = cart.stream()
-                .filter(cartItem -> cartItem.getProductId().equals(productId))
-                .findFirst()
-                .orElseThrow(() -> new CustomRuntimeException(ErrorCode.CART_ITEM_NOT_FOUND));
-
-        item.setQuantity(request.getQuantity());
-
-        userRepository.save(user);
-        CartResponse updatedCartResponse = cartServiceUtils.buildCartResponse(user.getCart());
-        return ApiResponse.success(updatedCartResponse, "Cart item quantity updated successfully");
+        User user = userHelper.getUserByUsername(username);
+        cartHelper.updateCartItemQuantity(user, productId, request.getQuantity());
+        CartResponse response = cartHelper.buildCartResponse(user.getCart());
+        return ApiResponse.success(response, "Cart item quantity updated successfully");
     }
 
     public ApiResponse<CartResponse> removeItemFromCart(
             String username,
             String productId
     ) {
-        User user = cartServiceUtils.getUserByUsername(username);
-        boolean removed = user.getCart()
-                .removeIf(item -> item.getProductId().equals(productId));
-
-        if (!removed) {
-            throw new CustomRuntimeException(ErrorCode.CART_ITEM_NOT_FOUND);
-        }
-
-        userRepository.save(user);
-        CartResponse updatedCartResponse = cartServiceUtils.buildCartResponse(user.getCart());
-        return ApiResponse.success(updatedCartResponse, "Product removed from cart successfully.");
+        User user = userHelper.getUserByUsername(username);
+        cartHelper.removeItemFromCart(user, productId);
+        CartResponse response = cartHelper.buildCartResponse(user.getCart());
+        return ApiResponse.success(response, "Product removed from cart successfully.");
     }
 
     public ApiResponse<CartResponse> clearCart(
             String username
     ) {
-        User user = cartServiceUtils.getUserByUsername(username);
-        user.getCart().clear();
-        userRepository.save(user);
-        CartResponse clearedCartResponse = cartServiceUtils.buildCartResponse(user.getCart());
-        return ApiResponse.success(clearedCartResponse, "Cart cleared successfully");
+        User user = userHelper.getUserByUsername(username);
+        cartHelper.clearCart(user);
+        CartResponse response = cartHelper.buildCartResponse(user.getCart());
+        return ApiResponse.success(response, "Cart cleared successfully");
     }
 
 }
