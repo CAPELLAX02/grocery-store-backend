@@ -87,11 +87,18 @@ public class AuthenticationService {
     public ApiResponse<String> activateUser(
             ActivateAccountRequest request
     ) {
-        User user = userRepository.findByEmail(request.getEmail())
+        User user = userRepository.findByEmailAndActivationCode(
+                        request.getEmail(),
+                        request.getActivationCode()
+                )
                 .orElseThrow(() -> new CustomRuntimeException(ErrorCode.USER_NOT_FOUND));
 
         if (!user.getActivationCode().equals(request.getActivationCode())) {
-            throw new CustomRuntimeException(ErrorCode.INVALID_ACTIVATION_CODE);
+            throw new CustomRuntimeException(ErrorCode.INVALID_OR_EXPIRED_ACTIVATION_CODE);
+        }
+
+        if (user.getActivationCodeExpiryDate().isBefore(LocalDateTime.now())) {
+            throw new CustomRuntimeException(ErrorCode.INVALID_OR_EXPIRED_ACTIVATION_CODE);
         }
 
         user.setEnabled(true);
@@ -153,8 +160,11 @@ public class AuthenticationService {
     public ApiResponse<ResetPasswordResponse> resetPassword(
             ResetPasswordRequest request
     ) {
-        User user = userRepository.findByResetPasswordCode(request.getResetPasswordCode())
-                .orElseThrow(() -> new CustomRuntimeException(ErrorCode.INVALID_RESET_PASSWORD_CODE));
+        User user = userRepository.findByEmailAndResetPasswordCode(
+                        request.getEmail(),
+                        request.getResetPasswordCode()
+                )
+                .orElseThrow(() -> new CustomRuntimeException(ErrorCode.INVALID_OR_EXPIRED_RESET_PASSWORD_CODE));
 
         user.setPassword(passwordEncoder.encode(request.getNewPassword()));
         user.setResetPasswordCode(null);

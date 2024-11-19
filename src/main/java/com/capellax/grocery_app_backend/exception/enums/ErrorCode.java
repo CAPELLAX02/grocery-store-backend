@@ -9,8 +9,8 @@ public enum ErrorCode {
     // AUTHENTICATION ERRORS
     USER_ALREADY_EXISTS("User already exists", HttpStatus.CONFLICT),
     USER_NOT_FOUND("User not found", HttpStatus.NOT_FOUND),
-    INVALID_ACTIVATION_CODE("Invalid activation code", HttpStatus.BAD_REQUEST),
-    INVALID_RESET_PASSWORD_CODE("Invalid activation code", HttpStatus.BAD_REQUEST),
+    INVALID_OR_EXPIRED_ACTIVATION_CODE("Invalid or expired activation code", HttpStatus.BAD_REQUEST),
+    INVALID_OR_EXPIRED_RESET_PASSWORD_CODE("Invalid activation code", HttpStatus.BAD_REQUEST),
     INVALID_CREDENTIALS("Invalid username or password", HttpStatus.UNAUTHORIZED),
     TOKEN_CREATION_FAILED("Token creation failed", HttpStatus.INTERNAL_SERVER_ERROR),
     INVALID_TOKEN("Invalid or expired token", HttpStatus.UNAUTHORIZED),

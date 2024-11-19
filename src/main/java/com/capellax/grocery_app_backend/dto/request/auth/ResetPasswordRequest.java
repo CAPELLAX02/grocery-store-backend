@@ -1,11 +1,16 @@
 package com.capellax.grocery_app_backend.dto.request.auth;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
 public class ResetPasswordRequest {
+
+    @NotBlank(message = "Email is required")
+    @Email(message = "Email must be valid")
+    private String email;
 
     @NotBlank(message = "Activation code is required")
     private String resetPasswordCode;
