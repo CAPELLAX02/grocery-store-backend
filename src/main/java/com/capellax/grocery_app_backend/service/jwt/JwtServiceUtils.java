@@ -25,7 +25,7 @@ public class JwtServiceUtils {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    protected Claims extractAllClaimsFromToken(String token) {
+    public Claims extractAllClaimsFromToken(String token) {
         try {
             return Jwts.parserBuilder()
                     .setSigningKey(getSigningKey())
@@ -34,7 +34,7 @@ public class JwtServiceUtils {
                     .getBody();
 
         } catch (Exception e) {
-            throw new CustomRuntimeException(ErrorCode.INVALID_TOKEN);
+            throw new CustomRuntimeException(ErrorCode.INVALID_OR_EXPIRED_ACCESS_TOKEN);
         }
     }
 

@@ -1,11 +1,12 @@
 package com.capellax.grocery_app_backend.dto.response.auth;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
-public class LoginResponse {
+@AllArgsConstructor
+public class RefreshTokenResponse {
 
-    private String username;
     private String accessToken;
     private String refreshToken;
 

@@ -13,8 +13,9 @@ public enum ErrorCode {
     INVALID_OR_EXPIRED_RESET_PASSWORD_CODE("Invalid activation code", HttpStatus.BAD_REQUEST),
     INVALID_CREDENTIALS("Invalid username or password", HttpStatus.UNAUTHORIZED),
     TOKEN_CREATION_FAILED("Token creation failed", HttpStatus.INTERNAL_SERVER_ERROR),
-    INVALID_TOKEN("Invalid or expired token", HttpStatus.UNAUTHORIZED),
+    INVALID_OR_EXPIRED_ACCESS_TOKEN("Invalid or expired access token", HttpStatus.UNAUTHORIZED),
     ACCOUNT_NOT_ACTIVATED("Account is not activated", HttpStatus.FORBIDDEN),
+    INVALID_OR_EXPIRED_REFRESH_TOKEN("Refresh token expired", HttpStatus.UNAUTHORIZED),
 
     // CART ERRORS
     CART_ITEM_NOT_FOUND("Cart item not found", HttpStatus.NOT_FOUND),

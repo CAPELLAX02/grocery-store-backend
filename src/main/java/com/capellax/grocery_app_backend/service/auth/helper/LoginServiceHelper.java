@@ -29,12 +29,16 @@ public class LoginServiceHelper {
                     )
             );
 
-            String token = jwtService.generateToken(request.getUsername());
+            String accessToken = jwtService.generateAccessToken(request.getUsername());
+            String refreshToken = jwtService.generateRefreshToken(request.getUsername());
+
             LoginResponse response = new LoginResponse();
             response.setUsername(request.getUsername());
-            response.setToken(token);
+            response.setAccessToken(accessToken);
+            response.setRefreshToken(refreshToken);
 
             return ApiResponse.success(response, "Logged in successfully.");
+
         } catch (BadCredentialsException e) {
             throw new CustomRuntimeException(ErrorCode.INVALID_CREDENTIALS);
         }

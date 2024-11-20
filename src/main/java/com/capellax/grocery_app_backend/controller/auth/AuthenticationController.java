@@ -1,13 +1,11 @@
 package com.capellax.grocery_app_backend.controller.auth;
 
 import com.capellax.grocery_app_backend.dto.request.auth.*;
-import com.capellax.grocery_app_backend.dto.response.auth.ForgotPasswordResponse;
-import com.capellax.grocery_app_backend.dto.response.auth.LoginResponse;
-import com.capellax.grocery_app_backend.dto.response.auth.RegisterResponse;
-import com.capellax.grocery_app_backend.dto.response.auth.ResetPasswordResponse;
+import com.capellax.grocery_app_backend.dto.response.auth.*;
 import com.capellax.grocery_app_backend.exception.custom.CustomMailException;
 import com.capellax.grocery_app_backend.response.ApiResponse;
 import com.capellax.grocery_app_backend.service.auth.AuthenticationService;
+import com.capellax.grocery_app_backend.service.jwt.JwtService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
+    private final JwtService jwtService;
 
     @PostMapping("/register")
     public ResponseEntity<ApiResponse<RegisterResponse>> registerUser(
@@ -43,6 +42,17 @@ public class AuthenticationController {
     ) {
         ApiResponse<LoginResponse> response = authenticationService.loginUser(request);
         return ResponseEntity.status(response.getStatus()).body(response);
+    }
+
+    @PostMapping("/refresh-token")
+    public ResponseEntity<ApiResponse<RefreshTokenResponse>> refreshToken(
+            @Valid @RequestBody RefreshTokenRequest request
+    ) {
+        jwtService.validateRefreshToken(request.getRefreshToken());
+        String username = jwtService.extractUsernameFromToken(request.getRefreshToken());
+        String newAccessToken = jwtService.generateAccessToken(username);
+        RefreshTokenResponse response = new RefreshTokenResponse(newAccessToken, request.getRefreshToken());
+        return ResponseEntity.ok(ApiResponse.success(response, "Token refreshed successfully."));
     }
 
     @PostMapping("/forgot-password")
