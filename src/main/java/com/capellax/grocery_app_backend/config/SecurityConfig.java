@@ -69,11 +69,6 @@ public class SecurityConfig {
                         .requestMatchers(GET,    "/api/v1/products/{id}").permitAll()
                         .requestMatchers(GET,    "/api/v1/products/{productId}/reviews").permitAll()
 
-                        .requestMatchers(GET,    "/v3/api-docs/**").permitAll()
-                        .requestMatchers(GET,    "/swagger-ui/**").permitAll()
-                        .requestMatchers(GET,    "/swagger-ui.html").permitAll()
-                        .requestMatchers(GET,    "/swagger-ui/index.html").permitAll()
-
                         // ------------------------ AUTHENTICATED-ONLY ENDPOINTS -------------------------
 
                         .requestMatchers(GET,    "/api/v1/cart").authenticated()
