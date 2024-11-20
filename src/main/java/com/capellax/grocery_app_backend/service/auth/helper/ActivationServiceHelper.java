@@ -69,10 +69,12 @@ public class ActivationServiceHelper {
     }
 
     public ApiResponse<String> handleAccountActivation(ActivateAccountRequest request) {
-        User user = userRepository.findByEmailAndActivationCode(
-                request.getEmail(),
-                request.getActivationCode()
-        ).orElseThrow(() -> new CustomRuntimeException(ErrorCode.USER_NOT_FOUND));
+        User user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new CustomRuntimeException(ErrorCode.USER_NOT_FOUND));
+
+        if (!request.getActivationCode().equals(user.getActivationCode())) {
+            throw new CustomRuntimeException(ErrorCode.INVALID_OR_EXPIRED_ACTIVATION_CODE);
+        }
 
         if (utils.isCodeExpired(user.getActivationCodeExpiryDate())) {
             throw new CustomRuntimeException(ErrorCode.INVALID_OR_EXPIRED_ACTIVATION_CODE);

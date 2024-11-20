@@ -41,10 +41,12 @@ public class PasswordServiceHelper {
     }
 
     public ApiResponse<ResetPasswordResponse> handleResetPassword(ResetPasswordRequest request) {
-        User user = userRepository.findByEmailAndResetPasswordCode(
-                request.getEmail(),
-                request.getResetPasswordCode()
-        ).orElseThrow(() -> new CustomRuntimeException(ErrorCode.INVALID_OR_EXPIRED_RESET_PASSWORD_CODE));
+        User user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new CustomRuntimeException(ErrorCode.USER_NOT_FOUND));
+
+        if (!request.getResetPasswordCode().equals(user.getResetPasswordCode())) {
+            throw new CustomRuntimeException(ErrorCode.INVALID_OR_EXPIRED_RESET_PASSWORD_CODE);
+        }
 
         if (utils.isCodeExpired(user.getResetPasswordCodeExpiryDate())) {
             throw new CustomRuntimeException(ErrorCode.INVALID_OR_EXPIRED_RESET_PASSWORD_CODE);
@@ -53,7 +55,6 @@ public class PasswordServiceHelper {
         user.setPassword(utils.encodePassword(request.getNewPassword()));
         user.setResetPasswordCode(null);
         user.setResetPasswordCodeExpiryDate(null);
-
         userRepository.save(user);
 
         return ApiResponse.success(null, "Password reset successfully.");
