@@ -92,6 +92,11 @@ public class SecurityConfig {
                         .requestMatchers(GET,   "/api/v1/users/profile").authenticated()
                         .requestMatchers(PATCH, "/api/v1/users/profile").authenticated()
 
+                        .requestMatchers(GET,   "/api/v1/wishlist").authenticated()
+                        .requestMatchers(POST,  "/api/v1/wishlist").authenticated()
+                        .requestMatchers(DELETE,"/api/v1/wishlist/{productId}").authenticated()
+                        .requestMatchers(DELETE,"/api/v1/wishlist").authenticated()
+
                         // ------------------ ALL OTHER REQUESTS REQUIRE AUTHENTICATION ------------------
 
                         .anyRequest().authenticated()

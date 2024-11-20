@@ -34,6 +34,8 @@ public enum ErrorCode {
     PRODUCT_NOT_FOUND("Product not found", HttpStatus.NOT_FOUND),
     PRODUCTS_NOT_FOUND("Products not found", HttpStatus.NOT_FOUND),
     PRODUCT_OUT_OF_STOCK("Product out of stock", HttpStatus.BAD_REQUEST),
+    PRODUCT_NOT_FOUND_IN_WISHLIST("Product not found in wishlist", HttpStatus.NOT_FOUND),
+    PRODUCT_ALREADY_IN_WISHLIST("Product already exists in wishlist", HttpStatus.CONFLICT),
 
     // MAIL ERRORS
     // are going to be thrown as separate "custom mail exceptions" signatures when methods are defined

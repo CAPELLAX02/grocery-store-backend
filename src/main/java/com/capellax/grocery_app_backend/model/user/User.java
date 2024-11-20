@@ -36,6 +36,7 @@ public class User {
     private boolean enabled;
     private List<CartItem> cart = new ArrayList<>();
     private List<Order> orders = new ArrayList<>();
+    private List<String> wishlist = new ArrayList<>();
 
     @CreatedDate
     private Instant createdAt;
