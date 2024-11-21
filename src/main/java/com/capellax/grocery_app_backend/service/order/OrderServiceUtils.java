@@ -50,6 +50,7 @@ public class OrderServiceUtils {
     protected OrderResponse buildOrderResponse(Order order) {
         OrderResponse response = new OrderResponse();
         response.setOrderId(order.getOrderId());
+        response.setAddress(order.getAddress());
         response.setDate(order.getDate());
         response.setTotalAmount(order.getTotal());
         response.setItems(order.getOrderItems().stream()

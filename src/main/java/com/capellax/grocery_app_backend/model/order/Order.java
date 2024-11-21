@@ -9,6 +9,7 @@ import java.util.List;
 public class Order {
 
     private String orderId;
+    private String address;
     private LocalDate date;
     private Double total;
     private List<OrderItem> orderItems;

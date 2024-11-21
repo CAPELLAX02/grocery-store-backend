@@ -22,7 +22,8 @@ public class OrderService {
     private final OrderServiceUtils orderServiceUtils;
 
     public ApiResponse<OrderResponse> placeOrder(
-            String username
+            String username,
+            String address
     ) {
         User user = orderServiceUtils.getUserByUsername(username);
 
@@ -32,6 +33,7 @@ public class OrderService {
 
         Order order = new Order();
         order.setOrderId(orderServiceUtils.generateOrderId());
+        order.setAddress(address);
         order.setDate(LocalDate.now());
         order.setTotal(orderServiceUtils.calculateTotalAmount(user.getCart()));
         order.setOrderItems(user.getCart().stream()

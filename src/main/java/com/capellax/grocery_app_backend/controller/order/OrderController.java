@@ -1,10 +1,12 @@
 package com.capellax.grocery_app_backend.controller.order;
 
+import com.capellax.grocery_app_backend.dto.request.order.PlaceOrderRequest;
 import com.capellax.grocery_app_backend.dto.response.order.OrderListResponse;
 import com.capellax.grocery_app_backend.dto.response.order.OrderResponse;
 import com.capellax.grocery_app_backend.response.ApiResponse;
 import com.capellax.grocery_app_backend.security.user.UserDetailsImpl;
 import com.capellax.grocery_app_backend.service.order.OrderService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -20,9 +22,10 @@ public class OrderController {
 
     @PostMapping
     public ResponseEntity<ApiResponse<OrderResponse>> placeOrder(
-            @AuthenticationPrincipal UserDetailsImpl userDetails
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @Valid @RequestBody PlaceOrderRequest request
     ) {
-        ApiResponse<OrderResponse> response = orderService.placeOrder(userDetails.getUsername());
+        ApiResponse<OrderResponse> response = orderService.placeOrder(userDetails.getUsername(), request.getAddress());
         return ResponseEntity.status(response.getStatus()).body(response);
     }
 
