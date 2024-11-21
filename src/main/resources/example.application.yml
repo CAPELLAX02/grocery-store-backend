@@ -1,0 +1,98 @@
+spring:
+
+  application:
+    name: grocery-app-backend
+
+  profiles:
+    active: dev
+
+  data:
+    mongodb:
+      uri: YOUR_MONGODB_URI_WITH_CREDENTIALS/YOUR_DB_NAME
+      database: YOUR_DB_NAME
+
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 10MB
+      location: /tmp
+
+  thymeleaf:
+    cache: false
+    mode: HTML
+    encoding: UTF-8
+    servlet:
+      content-type: text/html
+
+  task:
+    execution:
+      pool:
+        core-size: 5
+        max-size: 10
+        queue-capacity: 500
+    scheduling:
+      pool:
+        size: 10
+
+  mail:
+    host: YOUR_SMTP_HOST
+    port: YOUR_SMTP_PORT
+    username: YOUR_SMTP_USERNAME
+    password: YOUR_SMTP_PASSWORD
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          starttls.required: true
+
+server:
+  port: 8080
+  error:
+    include-message: always
+  compression:
+    enabled: true
+    mime-types: application/json, application/xml, text/html, text/xml, text/plain
+    min-response-size: 1024
+
+security:
+  jwt:
+    access-token:
+      secret: YOUR_JWT_SECRET
+      expiration: YOUR_ACCESS_TOKEN_EXPIRATION
+    refresh-token:
+      expiration: YOUR_REFRESH_TOKEN_EXPIRATION
+
+logging:
+  level:
+    root: INFO
+    org.springframework.web: DEBUG
+  file:
+    name: /var/log/grocery-app-backend/application.log
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+  logback:
+    console:
+      pattern: "%highlight(%-5level) %yellow(%d{yyyy-MM-dd HH:mm:ss.SSS}) [%thread] %cyan(%logger{36}) : %msg%n%throwable"
+    file:
+      pattern: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} [%file:%line] - %msg%n"
+  color: true
+
+api:
+  base-uri: /api/v1
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics
+  health:
+    mongodb:
+      enabled: true
+    diskspace:
+      threshold: 10MB
+    mail:
+      enabled: true

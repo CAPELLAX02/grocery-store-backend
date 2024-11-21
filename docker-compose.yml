@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:5.0
+    container_name: grocery-app-mongo
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: grocery_app_db     # database name
+      MONGO_INITDB_ROOT_USERNAME: grocery       # database root username
+      MONGO_INITDB_ROOT_PASSWORD: Capellax_002  # database root password
+    volumes:
+      - mongo_data:/data/db
+
+  app:
+    build: .
+    container_name: grocery-app-backend
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+    depends_on:
+      - mongodb
+    volumes:
+      - ./logs:/var/log/grocery-app-backend
+      - ./uploads:/tmp/uploads
+
+volumes:
+  mongo_data:
