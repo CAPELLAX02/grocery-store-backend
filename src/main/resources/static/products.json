@@ -8,6 +8,7 @@
     "category": "Fruits",
     "brand": "Nature's Best",
     "weight": "1kg",
+    "averageRating": 4.5,
     "reviews": [
       {
         "username": "john_doe",
@@ -32,6 +33,7 @@
     "category": "Bakery",
     "brand": "Baker's Delight",
     "weight": "500g",
+    "averageRating": 3,
     "reviews": [
       {
         "username": "alice_m",
@@ -50,6 +52,7 @@
     "category": "Dairy",
     "brand": "Farm Fresh",
     "weight": "1L",
+    "averageRating": 5,
     "reviews": [
       {
         "username": "bob_k",
@@ -79,6 +82,7 @@
     "category": "Vegetables",
     "brand": "Nature's Farm",
     "weight": "1kg",
+    "averageRating": 4,
     "reviews": [
       {
         "username": "mark_z",
@@ -97,6 +101,7 @@
     "category": "Cooking Oil",
     "brand": "Olive Tree",
     "weight": "750ml",
+    "averageRating": 4.5,
     "reviews": [
       {
         "username": "susan_b",
@@ -121,6 +126,7 @@
     "category": "Pantry",
     "brand": "Italiano",
     "weight": "500g",
+    "averageRating": 5,
     "reviews": [
       {
         "username": "carla_g",
@@ -139,6 +145,7 @@
     "category": "Fruits",
     "brand": "Tropical Harvest",
     "weight": "1kg",
+    "averageRating": 4,
     "reviews": [
       {
         "username": "david_l",
@@ -157,6 +164,7 @@
     "category": "Dairy",
     "brand": "Yogurt Land",
     "weight": "500g",
+    "averageRating": 5,
     "reviews": [
       {
         "username": "julia_r",

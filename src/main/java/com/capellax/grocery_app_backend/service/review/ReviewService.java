@@ -57,7 +57,9 @@ public class ReviewService {
 
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new CustomRuntimeException(ErrorCode.PRODUCT_NOT_FOUND));
+
         product.getReviews().add(review);
+        product.calculateAverageRating();
         productRepository.save(product);
 
         ReviewResponse response = reviewServiceUtils.buildReviewResponse(review);
@@ -76,7 +78,9 @@ public class ReviewService {
             throw new CustomRuntimeException(ErrorCode.REVIEW_NOT_FOUND);
         }
 
+        product.calculateAverageRating();
         productRepository.save(product);
+
         return ApiResponse.success(null, "Review deleted successfully");
     }
 

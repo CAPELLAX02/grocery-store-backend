@@ -29,6 +29,7 @@ public class ProductService {
         Page<Product> productPage = productRepository.findAll(pageable);
 
         List<ProductResponse> productResponses = productPage.getContent().stream()
+                .peek(Product::calculateAverageRating)
                 .map(productServiceUtils::buildProductResponse)
                 .toList();
 

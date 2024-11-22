@@ -21,6 +21,7 @@ public class ProductServiceUtils {
         response.setBrand(product.getBrand());
         response.setWeight(product.getWeight());
         response.setReviews(product.getReviews());
+        response.setAverageRating(product.getAverageRating());
         return response;
     }
 

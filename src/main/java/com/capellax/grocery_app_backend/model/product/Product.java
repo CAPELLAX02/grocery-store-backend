@@ -32,11 +32,24 @@ public class Product {
     private String brand;
     private String weight;
     private List<Review> reviews;
+    private Double averageRating;
 
     @CreatedDate
     private Instant createdAt;
 
     @LastModifiedDate
     private Instant lastModifiedAt;
+
+    public void calculateAverageRating() {
+        if (reviews == null || reviews.isEmpty()) {
+            this.averageRating = 0.0;
+        }
+        else {
+            this.averageRating = reviews.stream()
+                    .mapToDouble(Review::getRating)
+                    .average()
+                    .orElse(0.0);
+        }
+    }
 
 }

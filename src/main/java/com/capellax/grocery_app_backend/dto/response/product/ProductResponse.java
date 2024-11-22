@@ -18,5 +18,6 @@ public class ProductResponse {
     private String brand;
     private String weight;
     private List<Review> reviews;
+    private Double averageRating;
 
 }
