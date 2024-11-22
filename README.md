@@ -17,7 +17,7 @@ Whether you're developing a grocery delivery app or exploring backend concepts, 
 ---
 
 ## API Documentation
-For a detailed API reference, you can check out the [API Documentation](docs/GroceryApp_API_Documentation_v1.0.pdf). The API Documentation also includes the **Postman** collection of the whole backend project.
+For a detailed API reference, you can check out the [API Documentation](docs/GroceryStore_API_Documentation_v1.0.pdf). The API Documentation also includes the **Postman** collection of the whole backend project.
 
 ---
 
