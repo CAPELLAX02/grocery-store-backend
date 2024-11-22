@@ -11,11 +11,17 @@ import java.util.Properties;
 @Configuration
 public class MailConfig {
 
-//    @Value("${spring.mail.host}")
-    private final String host = "smtp.gmail.com";
-    private final int port = 587;
-    private final String username = "ahmetatar002@gmail.com";
-    private final String password = "sorc taim hvsa vzhv";
+    @Value("${spring.mail.host}")
+    private String host;
+
+    @Value("${spring.mail.port}")
+    private int port;
+
+    @Value("${spring.mail.username}")
+    private String username;
+
+    @Value("${spring.mail.password}")
+    private String password;
 
     @Bean
     public JavaMailSender javaMailSender() {

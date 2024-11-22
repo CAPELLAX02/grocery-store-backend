@@ -7,6 +7,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -15,10 +16,8 @@ import java.security.Key;
 @RequiredArgsConstructor
 public class JwtServiceUtils {
 
-//    @Value("${security.jwt.secret}")
-    private final String jwtSecret = "KDskFIEOEDUnoobSrqCfCGTcSvsTCGDujUXNDVS+IKvkbBBDLYgDaEYs5avdNF6AIUtbW1OorIYXMWeJrrNrMm4X68ELdQBwlWRq8RTwnKud0AQaVCjTQBfjmGmX2rkKaXz7SMAuUuGwgsX32tfQvWKmO/cwSwjjtyj3EqE/2BN8";
-
-//    private final JwtConfig jwtConfig;
+    @Value("${security.jwt.access-token.secret}")
+    private String jwtSecret;
 
     protected Key getSigningKey() {
         byte[] keyBytes = Decoders.BASE64.decode(jwtSecret);

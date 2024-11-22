@@ -18,11 +18,11 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 @EnableMongoAuditing
 public class MongoConfig extends AbstractMongoClientConfiguration {
 
-//    @Value("${spring.data.mongodb.uri}")
-    private final String mongoUri = "mongodb+srv://grocery:Capellax_002@grocery-app-cluster.xboix.mongodb.net/grocery_app_db";
+    @Value("${spring.data.mongodb.uri}")
+    private String mongoUri;
 
-//    @Value("${spring.data.mongodb.database}")
-    private final String databaseName = "grocery_app_db";
+    @Value("${spring.data.mongodb.database}")
+    private String databaseName;
 
     @Override
     @NonNull

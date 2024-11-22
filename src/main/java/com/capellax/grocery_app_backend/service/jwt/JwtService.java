@@ -6,6 +6,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -20,8 +21,11 @@ public class JwtService {
 
     private final JwtServiceUtils jwtServiceUtils;
 
-    private final Long accessTokenExpiration = 3600000L; // 1 hour
-    private final Long refreshTokenExpiration = 604800000L; // 7 days
+    @Value("${security.jwt.access-token.expiration}")
+    private Long accessTokenExpiration; // 24 hours
+
+    @Value("${security.jwt.refresh-token.expiration}")
+    private Long refreshTokenExpiration; // 7 days
 
     public <T> T extractClaimsFromToken(String token, Function<Claims, T> claimsResolver) {
         try {
