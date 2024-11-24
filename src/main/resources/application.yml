@@ -1,0 +1,100 @@
+spring:
+
+  application:
+    name: grocery-app-backend
+
+  profiles:
+    active: dev
+
+  data:
+    mongodb:
+      uri: ${MONGO_DB_URI}
+      database: ${MONGO_DB_NAME}
+
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 10MB
+      location: /tmp
+
+  thymeleaf:
+    cache: false
+    mode: HTML
+    encoding: UTF-8
+    servlet:
+      content-type: text/html
+
+  task:
+    execution:
+      pool:
+        core-size: 5
+        max-size: 10
+        queue-capacity: 500
+    scheduling:
+      pool:
+        size: 10
+
+  mail:
+    host: ${EMAIL_HOST}
+    port: ${EMAIL_PORT}
+    username: ${EMAIL_USERNAME}
+    password: ${EMAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          starttls.required: true
+
+server:
+  port: ${SERVER_PORT}
+  error:
+    include-message: always
+  compression:
+    enabled: true
+    mime-types: application/json, application/xml, text/html, text/xml, text/plain
+    min-response-size: 1024
+
+# openssl rand -base64 129 | tr -d '\n'
+security:
+  jwt:
+    access-token:
+      secret: ${ACCESS_TOKEN_SECRET}
+      expiration: ${ACCESS_TOKEN_EXPIRATION}
+    refresh-token:
+      expiration: ${REFRESH_TOKEN_EXPIRATION}
+
+
+logging:
+  level:
+    root: INFO
+    org.springframework.web: DEBUG
+  file:
+    name: /var/log/grocery-app-backend/application.log
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+  logback:
+    console:
+      pattern: "%highlight(%-5level) %yellow(%d{yyyy-MM-dd HH:mm:ss.SSS}) [%thread] %cyan(%logger{36}) : %msg%n%throwable"
+    file:
+      pattern: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} [%file:%line] - %msg%n"
+  color: true
+
+api:
+  base-uri: /api/v1
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics
+  health:
+    mongodb:
+      enabled: true
+    diskspace:
+      threshold: 10MB
+    mail:
+      enabled: true

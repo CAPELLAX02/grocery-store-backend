@@ -13,14 +13,6 @@ build/
 .mvn/
 !.mvn/wrapper/maven-wrapper.jar
 
-# Sensitive Spring Boot configuration files
-src/main/resources/application.yml
-src/main/resources/application.yaml
-src/main/resources/application-*.yml
-src/main/resources/application-*.yaml
-src/main/resources/application.yml
-src/main/resources/application-*.properties
-
 # STS (Spring Tool Suite) specific files
 .apt_generated
 .classpath
