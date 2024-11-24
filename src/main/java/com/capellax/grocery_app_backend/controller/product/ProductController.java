@@ -9,8 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-//@RequestMapping("${api.base-uri}/products")
-@RequestMapping("/api/v1/products")
+@RequestMapping("${api.base-uri}/products")
 @RequiredArgsConstructor
 public class ProductController {
 
