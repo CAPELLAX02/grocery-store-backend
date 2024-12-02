@@ -67,21 +67,21 @@ security:
       expiration: ${REFRESH_TOKEN_EXPIRATION}
 
 
-logging:
-  level:
-    root: INFO
-    org.springframework.web: DEBUG
-  file:
-    name: /var/log/grocery-app-backend/application.log
-  pattern:
-    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
-    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
-  logback:
-    console:
-      pattern: "%highlight(%-5level) %yellow(%d{yyyy-MM-dd HH:mm:ss.SSS}) [%thread] %cyan(%logger{36}) : %msg%n%throwable"
-    file:
-      pattern: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} [%file:%line] - %msg%n"
-  color: true
+#logging:
+#  level:
+#    root: INFO
+#    org.springframework.web: DEBUG
+#  file:
+#    name: /var/log/grocery-app-backend/application.log
+#  pattern:
+#    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+#    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+#  logback:
+#    console:
+#      pattern: "%highlight(%-5level) %yellow(%d{yyyy-MM-dd HH:mm:ss.SSS}) [%thread] %cyan(%logger{36}) : %msg%n%throwable"
+#    file:
+#      pattern: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} [%file:%line] - %msg%n"
+#  color: true
 
 api:
   base-uri: /api/v1
