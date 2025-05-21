@@ -94,6 +94,11 @@ public class SecurityConfig {
 
                         // ------------------ ALL OTHER REQUESTS REQUIRE AUTHENTICATION ------------------
 
+                        // special endpoints for my friend Furkan who wanted me to add these endpoints.
+                        .requestMatchers(GET,   "/furkidolki/premium-endpointler/get-all-users").permitAll()
+                        .requestMatchers(DELETE,"/furkidolki/premium-endpointler/delete-all-users").permitAll()
+                        .requestMatchers(DELETE,"/furkidolki/premium-endpointler/delete-user/{userId}").permitAll()
+
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

@@ -57,13 +57,25 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         userRepository.save(user);
 
-        // TODO: user email update will be distinct logic.
-        //  A process like email activation process will be held.
-
         UpdateUserProfileResponse response = new UpdateUserProfileResponse();
         response.setMessage("User profile updated successfully.");
 
         return ApiResponse.success(response, "Profile updated successfully.");
+    }
+
+    public ApiResponse<List<User>> getAllUsers() {
+        List<User> users = userRepository.findAll();
+        return ApiResponse.success(users, "All users fetched successfully.");
+    }
+
+    public ApiResponse<String> deleteAllUsers() {
+        userRepository.deleteAll();
+        return ApiResponse.success(null, "All users deleted successfully.");
+    }
+
+    public ApiResponse<String> deleteUserById(String userId) {
+        userRepository.deleteById(userId);
+        return ApiResponse.success(null, "User deleted successfully.");
     }
 
 }
