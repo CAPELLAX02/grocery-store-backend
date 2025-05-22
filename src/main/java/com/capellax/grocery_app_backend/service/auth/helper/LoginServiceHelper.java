@@ -22,7 +22,7 @@ public class LoginServiceHelper {
 
     public ApiResponse<LoginResponse> handleLogin(LoginRequest request) {
         try {
-            Authentication authentication = authenticationManager.authenticate(
+            authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             request.getUsername(),
                             request.getPassword()

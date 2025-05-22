@@ -26,12 +26,18 @@ public class PasswordServiceHelper {
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new CustomRuntimeException(ErrorCode.USER_NOT_FOUND));
 
+        if (utils.isCodeStillValid(user.getResetPasswordCodeExpiryDate())) {
+            return ApiResponse.success(
+                    null,
+                    "Reset password code already sent. Please check your email."
+            );
+        }
+
         String resetPasswordCode = utils.generateResetPasswordCode();
         user.setResetPasswordCode(resetPasswordCode);
-        user.setResetPasswordCodeExpiryDate(utils.getResetPasswordCodeExpiryDate());
+        user.setResetPasswordCodeExpiryDate(utils.newExpiryDate());
 
         userRepository.save(user);
-
         mailService.sendResetPasswordCode(user.getEmail(), user.getUsername(), resetPasswordCode);
 
         ForgotPasswordResponse response = new ForgotPasswordResponse();
@@ -44,11 +50,10 @@ public class PasswordServiceHelper {
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new CustomRuntimeException(ErrorCode.USER_NOT_FOUND));
 
-        if (!request.getResetPasswordCode().equals(user.getResetPasswordCode())) {
-            throw new CustomRuntimeException(ErrorCode.INVALID_OR_EXPIRED_RESET_PASSWORD_CODE);
-        }
+        boolean codeMismatch = !request.getResetPasswordCode().equals(user.getResetPasswordCode());
+        boolean codeExpired  = utils.isCodeExpired(user.getResetPasswordCodeExpiryDate());
 
-        if (utils.isCodeExpired(user.getResetPasswordCodeExpiryDate())) {
+        if (codeMismatch || codeExpired) {
             throw new CustomRuntimeException(ErrorCode.INVALID_OR_EXPIRED_RESET_PASSWORD_CODE);
         }
 
@@ -57,7 +62,9 @@ public class PasswordServiceHelper {
         user.setResetPasswordCodeExpiryDate(null);
         userRepository.save(user);
 
-        return ApiResponse.success(null, "Password reset successfully.");
-    }
+        ResetPasswordResponse response = new ResetPasswordResponse();
+        response.setMessage("Password reset successfully.");
 
+        return ApiResponse.success(response, "Password reset successfully.");
+    }
 }
