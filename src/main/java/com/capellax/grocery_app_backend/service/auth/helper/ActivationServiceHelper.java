@@ -24,21 +24,25 @@ public class ActivationServiceHelper {
     private final AuthenticationServiceUtils utils;
 
     public ApiResponse<RegisterResponse> handleUserRegistration(RegisterRequest request) {
-        Optional<User> existingUser = userRepository.findByEmail(request.getEmail());
+        Optional<User> existingUserOpt = userRepository.findByEmail(request.getEmail());
 
-        if (existingUser.isPresent()) {
-            User user = existingUser.get();
-            if (Boolean.TRUE.equals(user.isEnabled())) {
+        if (existingUserOpt.isPresent()) {
+            User user = existingUserOpt.get();
+
+            if (user.isEnabled()) {
                 throw new CustomRuntimeException(ErrorCode.USER_ALREADY_EXISTS);
             }
 
             if (utils.isCodeStillValid(user.getActivationCodeExpiryDate())) {
-                return ApiResponse.success(null, "Activation code already sent. Please check your email.");
+                return ApiResponse.success(
+                        null,
+                        "Activation code already sent. Please check your email."
+                );
             }
 
             String newActivationCode = utils.generateActivationCode();
             user.setActivationCode(newActivationCode);
-            user.setActivationCodeExpiryDate(utils.getActivationCodeExpiryDate());
+            user.setActivationCodeExpiryDate(utils.newExpiryDate());
 
             userRepository.save(user);
             mailService.sendActivationCode(user.getEmail(), user.getUsername(), newActivationCode);
@@ -46,16 +50,15 @@ public class ActivationServiceHelper {
             return ApiResponse.success(null, "New activation code sent.");
         }
 
-        // New user registration
         User user = new User();
         user.setUsername(request.getUsername());
         user.setEmail(request.getEmail());
         user.setPassword(utils.encodePassword(request.getPassword()));
+        user.setEnabled(false);
 
         String activationCode = utils.generateActivationCode();
         user.setActivationCode(activationCode);
-        user.setActivationCodeExpiryDate(utils.getActivationCodeExpiryDate());
-        user.setEnabled(false);
+        user.setActivationCodeExpiryDate(utils.newExpiryDate());
 
         userRepository.save(user);
         mailService.sendActivationCode(user.getEmail(), user.getUsername(), activationCode);
@@ -72,11 +75,10 @@ public class ActivationServiceHelper {
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new CustomRuntimeException(ErrorCode.USER_NOT_FOUND));
 
-        if (!request.getActivationCode().equals(user.getActivationCode())) {
-            throw new CustomRuntimeException(ErrorCode.INVALID_OR_EXPIRED_ACTIVATION_CODE);
-        }
+        boolean codeMismatch = !request.getActivationCode().equals(user.getActivationCode());
+        boolean codeExpired  = utils.isCodeExpired(user.getActivationCodeExpiryDate());
 
-        if (utils.isCodeExpired(user.getActivationCodeExpiryDate())) {
+        if (codeMismatch || codeExpired) {
             throw new CustomRuntimeException(ErrorCode.INVALID_OR_EXPIRED_ACTIVATION_CODE);
         }
 
@@ -87,5 +89,4 @@ public class ActivationServiceHelper {
 
         return ApiResponse.success(null, "Account activated successfully.");
     }
-
 }

@@ -15,8 +15,9 @@ public class AuthenticationServiceUtils {
 
     private static final SecureRandom secureRandom = new SecureRandom();
 
-    private LocalDateTime activationCodeExpiryDate = LocalDateTime.now().plusMinutes(15);
-    private LocalDateTime resetPasswordCodeExpiryDate = LocalDateTime.now().plusMinutes(15);
+    public LocalDateTime newExpiryDate() {
+        return LocalDateTime.now().plusMinutes(15);
+    }
 
     public String generateActivationCode() {
         return generateRandomCode();
@@ -34,13 +35,12 @@ public class AuthenticationServiceUtils {
         return expiryDate == null || expiryDate.isBefore(LocalDateTime.now());
     }
 
-    private String generateRandomCode() {
-        int code = secureRandom.nextInt(900000) + 100000;
-        return String.valueOf(code);
-    }
-
     public String encodePassword(String rawPassword) {
         return new BCryptPasswordEncoder().encode(rawPassword);
     }
 
+    private String generateRandomCode() {
+        int code = secureRandom.nextInt(900_000) + 100_000;
+        return String.valueOf(code);
+    }
 }
