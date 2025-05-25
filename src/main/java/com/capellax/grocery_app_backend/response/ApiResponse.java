@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 
 @Data
@@ -16,7 +16,7 @@ public class ApiResponse<T> {
     private int status;
     private String message;
     private T data;
-    private LocalDateTime timestamp;
+    private Instant timestamp;
     private List<ErrorDetails> errors;
 
     public static <T> ApiResponse<T> success(
@@ -27,7 +27,7 @@ public class ApiResponse<T> {
         response.setStatus(HttpStatus.OK.value());
         response.setMessage(message);
         response.setData(data);
-        response.setTimestamp(LocalDateTime.now());
+        response.setTimestamp(Instant.now());
         return response;
     }
 
@@ -39,7 +39,7 @@ public class ApiResponse<T> {
         ApiResponse<T> response = new ApiResponse<>();
         response.setStatus(status.value());
         response.setMessage(message);
-        response.setTimestamp(LocalDateTime.now());
+        response.setTimestamp(Instant.now());
         response.setErrors(errors);
         return response;
     }
