@@ -2,6 +2,7 @@ package com.capellax.grocery_app_backend.service.mail;
 
 import com.capellax.grocery_app_backend.exception.custom.CustomMailException;
 import jakarta.mail.MessagingException;
+import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.MailException;
@@ -10,6 +11,8 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
+
+import java.io.UnsupportedEncodingException;
 
 @Component
 @RequiredArgsConstructor
@@ -51,10 +54,17 @@ public class MailServiceUtils {
             helper.setTo(to);
             helper.setSubject(subject);
             helper.setText(content, true);
+            helper.setFrom(new InternetAddress(
+                    "no-reply@bazilariburada.com",
+                    "BazılarıBurada"
+            ));
             mailSender.send(message);
 
         } catch (MailException | MessagingException e) {
             throw new CustomMailException("Failed to send reset password code", e);
+
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
         }
     }
 
