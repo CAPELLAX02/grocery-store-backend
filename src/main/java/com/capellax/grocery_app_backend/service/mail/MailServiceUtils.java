@@ -54,14 +54,11 @@ public class MailServiceUtils {
             helper.setTo(to);
             helper.setSubject(subject);
             helper.setText(content, true);
-            helper.setFrom(new InternetAddress(
-                    "no-reply@bazilariburada.com",
-                    "BazılarıBurada"
-            ));
+            helper.setFrom("ozanzadeoglu01@gmail.com", "BazılarıBurada");
             mailSender.send(message);
 
         } catch (MailException | MessagingException e) {
-            throw new CustomMailException("Failed to send reset password code", e);
+            throw new CustomMailException("Failed to send code via email", e);
 
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
